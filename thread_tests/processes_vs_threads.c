@@ -6,6 +6,7 @@
 #include <sys/wait.h>
 #include <sys/types.h>
 
-// processes: duplicate the calling process using fork()
+// 1. Multiple threads can exist inside a single process, threads also share memory
+// Tradeoff: Issues when different threads modify the same variable since they share memory:
 
-// threads
+

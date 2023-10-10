@@ -50,4 +50,5 @@ int main(int argc, char **argv)
         return (write(2, "Invalid argument count\n", 24), 1);
     if (check_valid_args(argv) == 1)
         return (1);
+    
 }

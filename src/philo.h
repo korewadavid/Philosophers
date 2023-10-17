@@ -19,6 +19,9 @@
 
 # define MAX_NUM_PHILO 200
 
+// each philosopher is a thread
+// 
+
 typedef struct s_philo
 {
     pthread_t       thread;

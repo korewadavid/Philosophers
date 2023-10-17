@@ -45,10 +45,16 @@ int check_valid_args(char **argv)
 
 int main(int argc, char **argv)
 {
+    //program struct
+    t_program   program;
+    //philo struct
+    t_philo     philos[PHILO_MAX];
+    pthread_mutex_t forks[PHILO_MAX];
+
     // 1. Check valid input
     if (argc != 5 && argc != 6)
         return (write(2, "Invalid argument count\n", 24), 1);
     if (check_valid_args(argv) == 1)
         return (1);
-    
+    init_program(&program, philos);
 }

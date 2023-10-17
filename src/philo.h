@@ -19,14 +19,11 @@
 
 # define MAX_NUM_PHILO 200
 
-// each philosopher is a thread
-// 
-
 typedef struct s_philo
 {
     pthread_t       thread;
     int             id;
-    int             eating;
+    int             eating; // flag if philo is currently eating
     int             meals_eaten;
     size_t          last_meal;
     size_t          time_to_die;
@@ -35,13 +32,13 @@ typedef struct s_philo
     size_t          start_time;
     int             num_of_philos;
     int             num_times_to_eat;
-    int             *deadfl;
-    pthread_mutex_t *r_lock;
+    int             *deadfl; // pointer to an integer flag indicating if a philo has died
+    pthread_mutex_t *r_lock; // pointer to right forks mutex
     pthread_mutex_t *l_fork;
-    pthread_mutex_t *write_lock;
-    pthread_mutex_t *dead_lock;
-    pthread_mutex_t *meal_lock;
-}               t_philo
+    pthread_mutex_t *write_lock; // pointer to a mutex for console output
+    pthread_mutex_t *dead_lock; // mutex for controlling access to the death flag
+    pthread_mutex_t *meal_lock; // mutex for controlling access to the meal count
+}               t_philo;
 
 typedef struct s_program
 {

@@ -45,9 +45,7 @@ int check_valid_args(char **argv)
 
 int main(int argc, char **argv)
 {
-    //program struct
     t_program   program;
-    //philo struct
     t_philo     philos[PHILO_MAX];
     pthread_mutex_t forks[PHILO_MAX];
 
@@ -56,5 +54,21 @@ int main(int argc, char **argv)
         return (write(2, "Invalid argument count\n", 24), 1);
     if (check_valid_args(argv) == 1)
         return (1);
+
+    // 2. Initialize program
     init_program(&program, philos);
 }
+
+/*
+    Questions
+    1. What is a mutex/pthread_mutex_t? 
+    A mutex is like a lock which only allows the thread its locked on to by the lock owner to be executed.
+*/
+
+/*
+    The Dining Philosophers Problem
+
+    threads = the philosophers: a sequence stream within a process (lightweight process)
+    ex: in a browser, multiple tabs can be different threads
+    we will use a multithreading solution: 
+*/

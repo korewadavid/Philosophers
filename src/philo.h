@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 16:00:36 by damendez          #+#    #+#             */
-/*   Updated: 2023/10/03 16:00:36 by damendez         ###   ########.fr       */
+/*   Updated: 2023/10/18 17:19:20 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,32 +21,33 @@
 
 typedef struct s_philo
 {
+	struct s_data	*data; // pointer to general data stucture
     pthread_t       thread;
     int             id;
-    int             eating; // flag if philo is currently eating
-    int             meals_eaten;
-    size_t          last_meal;
-    size_t          time_to_die;
-    size_t          time_to_eat;
-    size_t          time_to_sleep;
-    size_t          start_time;
-    int             num_of_philos;
-    int             num_times_to_eat;
-    int             *deadfl; // pointer to an integer flag indicating if a philo has died
+	int				eat_count;
+	int				status;
+	int				eating;
+	uint64_t		time_to_die;
+	pthread_mutex_t	lock;
     pthread_mutex_t *r_lock; // pointer to right forks mutex
     pthread_mutex_t *l_fork;
-    pthread_mutex_t *write_lock; // pointer to a mutex for console output
-    pthread_mutex_t *dead_lock; // mutex for controlling access to the death flag
-    pthread_mutex_t *meal_lock; // mutex for controlling access to the meal count
 }               t_philo;
 
-typedef struct s_program
+typedef struct s_data
 {
-    int             dead_flag;
-    pthread_mutex_t dead_lock;
-    pthread_mutex_t meal_lock;
-    pthread_mutex_t write_lock;
-    t_philo         *philos;
+	pthread_t		*tid;
+	int				philo_num; // number of philosophers
+	int				meals_nb; // number of meals each philosopher is expected to eat
+	int				dead;
+	int				finished; // if all the philosophers have finished eating
+	t_philo         *philos;
+	u_int64_t		death_time;
+	u_int64_t		eat_time;
+	u_int64_t		sleep_time;
+	u_int64_t		start_time;
+	pthread_mutex_t	*forks;
+	pthread_mutex_t lock;
+	pthread_mutex_t	write; // controlls access to writing to the output
 }               t_program;
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 15:57:58 by damendez          #+#    #+#             */
-/*   Updated: 2023/10/19 16:49:52 by damendez         ###   ########.fr       */
+/*   Updated: 2023/10/30 14:32:08 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,19 +49,6 @@ int main(int argc, char **argv)
         return (1);
 
     // 2. Initialize program
-    if (init_program(&data, argv, argc));
+    if (init_program(&data, argc, argv))
+		return (1);
 }
-
-/*
-    Questions
-    1. What is a mutex/pthread_mutex_t? 
-    A mutex is like a lock which only allows the thread its locked on to by the lock owner to be executed.
-*/
-
-/*
-    The Dining Philosophers Problem
-
-    threads = the philosophers: a sequence stream within a process (lightweight process)
-    ex: in a browser, multiple tabs can be different threads
-    we will use a multithreading solution: 
-*/

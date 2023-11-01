@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 16:00:36 by damendez          #+#    #+#             */
-/*   Updated: 2023/10/18 17:19:20 by damendez         ###   ########.fr       */
+/*   Updated: 2023/11/01 14:38:10 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,10 @@
 #include <unistd.h> // write()
 #include <stdio.h> //stdin/stdout/printf
 #include <sys/time.h>
+
+# define ALLOC_ERR_1 "Error while allocating: Thread IDs"
+# define ALLOC_ERR_2 "Error while allocating: Forks"
+# define ALLOC_ERR_3 "Error while allocating: Philos"
 
 # define MAX_NUM_PHILO 200
 
@@ -35,7 +39,7 @@ typedef struct s_philo
 
 typedef struct s_data
 {
-	pthread_t		*tid;
+	pthread_t		*tid; // thread identifier, there should be one per philo
 	int				philo_num; // number of philosophers
 	int				meals_nb; // number of meals each philosopher is expected to eat
 	int				dead;

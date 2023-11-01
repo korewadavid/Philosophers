@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 15:57:58 by damendez          #+#    #+#             */
-/*   Updated: 2023/10/30 14:32:08 by damendez         ###   ########.fr       */
+/*   Updated: 2023/11/01 15:52:27 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,7 @@ int main(int argc, char **argv)
     // 2. Initialize program
     if (init_program(&data, argc, argv))
 		return (1);
+
+	// 3. Initalize philos routine
+	if ()
 }

@@ -88,7 +88,7 @@ int		init_data(t_data *data, int argc, char **argv)
 
 	// Check if the values assigned to these variables are valid based on subject, if not print error INVALID INPUT VARIABLES
 	if (data->philo_num <= 0 || data->philo_num > 200 || data->death_time < 0 || data->eat_time < 0 || data->sleep_time < 0 || (data->meals_nb != -1 && data->meals_nb < 0))
-		return (error(ERR_IN_2, NULL);
+		return (error(ERR_IN_2, NULL));
 
 	// Initalize current dead and finished values
 	data->dead = 0;
@@ -103,13 +103,13 @@ int		init_data(t_data *data, int argc, char **argv)
 void    init_program(t_data *data, int argc, char **argv)
 {
 	// Initalize data that comes from input arguments, checking if correct
-	if (init_data(data. argc, argv)
+	if (init_data(data. argc, argv))
 		return (1);
 	// Initalize data that needs to be allocated with malloc
-	if (alloc(data)
+	if (alloc(data))
 		return (1);
 	// Initalize mutex forks for program
-	if (init_forks(data)
+	if (init_forks(data))
 		return (1);
 	// Initalize philospher data (? Why dont we check the init_philos function? Why did you choose not to make it return an int like init_data, init_philos and alloc?)
 	// Return 0 representing correct completion of function

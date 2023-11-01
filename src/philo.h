@@ -12,10 +12,10 @@
 
 #ifndef PHILO_H
 # define PHILO_H
-# include <pthread.h> // threads library
-# include <unistd.h> // write()
-# include <stdio.h> //stdin/stdout/printf
-# include <sys/time.h>
+#include <pthread.h> // threads library
+#include <unistd.h> // write()
+#include <stdio.h> //stdin/stdout/printf
+#include <sys/time.h>
 
 # define MAX_NUM_PHILO 200
 

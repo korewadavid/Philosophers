@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 16:00:36 by damendez          #+#    #+#             */
-/*   Updated: 2023/11/01 14:38:10 by damendez         ###   ########.fr       */
+/*   Updated: 2023/11/02 17:47:19 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@
 # define ALLOC_ERR_1 "Error while allocating: Thread IDs"
 # define ALLOC_ERR_2 "Error while allocating: Forks"
 # define ALLOC_ERR_3 "Error while allocating: Philos"
+
+# define TH_ERR "Error while creating: Threads"
+# define JOIN_ERR "Error while joining: Threads"
 
 # define MAX_NUM_PHILO 200
 
@@ -52,6 +55,6 @@ typedef struct s_data
 	pthread_mutex_t	*forks;
 	pthread_mutex_t lock;
 	pthread_mutex_t	write; // controlls access to writing to the output
-}               t_program;
+}               t_data;
 
 #endif

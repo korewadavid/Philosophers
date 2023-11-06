@@ -16,6 +16,7 @@
 	Questions
 
 	1. What does the lock mutex in t_data mean/do? 
+*/
 
 void	init_philos(t_data *data)
 {

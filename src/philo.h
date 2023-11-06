@@ -39,7 +39,7 @@ typedef struct s_philo
 	int				eating;
 	uint64_t		time_to_die;
 	pthread_mutex_t	lock;
-    pthread_mutex_t *r_lock; // pointer to right forks mutex
+    pthread_mutex_t *r_fork; // pointer to right forks mutex
     pthread_mutex_t *l_fork;
 }               t_philo;
 

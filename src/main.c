@@ -6,52 +6,57 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 15:57:58 by damendez          #+#    #+#             */
-/*   Updated: 2023/11/01 15:52:27 by damendez         ###   ########.fr       */
+/*   Updated: 2023/11/06 15:40:45 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int check_valid_args(char **argv) // iterates through input checking for non numeric values in input
+void	clear_data(t_data *data)
 {
-	int	i;
-	int	j;
+	// if allocated memory pointers in data struct are present, free() them
+}
 
-	i = 1;
-	while (argv[i])
-	{
-		j = 0;
-		while (argv[i][j])
-		{
-			if (argv[i][j] == ' ') // let the spaces slide
-			{
-				j++;
-				continue;
-			}
-			if (str[i][j] < 48 || str[i][j] > 57)
-				return (error(ERR_IN_1, NULL); // error msg -> INVALID INPUT CHARACTER
-			j++;
-		}
-		i++;
-	}
-	return (0);
+void	ft_exit(t_data *data)
+{
+	// for each philosopher, eliminate forks and philo lock mutexs
+
+	// eliminate the remaining mutexes in data struct
+
+	// call clear_data
+}
+
+int	error(char *err, t_data *data)
+{
+	// Print error message
+
+	// If data pointer was passed as paramter eliminate data stored
+
+	// Return error value 1
+}
+
+int	check_input(int argc, char **argv)
+{
+	// Declare counter ints
+
+	// Iterate through all of argv
+			// if there are spaces present skip to the next iteration of the loop
+			// if the current char is not valid (not a number), return error
 }
 
 int main(int argc, char **argv)
 {
-	t_data		data;
+	// Declare pointer to program data struct
 
-    // 1. Check valid input
-    if (argc != 5 && argc != 6)
-        return (write(2, "Invalid argument count\n", 24), 1);
+	// Check if number of input arguments is correct
 
-    if (check_valid_args(argv))
-        return (1);
+	// Check if user input is correct (philo_num, death_time, eat_time, sleept_time) and check optional fifth argument meals_num
 
-    // 2. Initialize program
-    if (init_program(&data, argc, argv))
-		return (1);
+	// Initiate program structures (here we also check if input values are correct)
 
-	// 3. Initalize philos routine
-	if ()
+	// Run specific code in the case of one philosopher
+
+	// Initiate threads for philosophers
+
+	// Exit program by clearing all data once finished
 }

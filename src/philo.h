@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 16:00:36 by damendez          #+#    #+#             */
-/*   Updated: 2023/11/02 17:47:19 by damendez         ###   ########.fr       */
+/*   Updated: 2023/11/06 16:54:05 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 #include <unistd.h> // write()
 #include <stdio.h> //stdin/stdout/printf
 #include <sys/time.h>
+
+# define ERR_IN_1 "Error Invalid Input Character"
+# define ERR_IN_2 "Error Invalid Input Values"
 
 # define ALLOC_ERR_1 "Error while allocating: Thread IDs"
 # define ALLOC_ERR_2 "Error while allocating: Forks"

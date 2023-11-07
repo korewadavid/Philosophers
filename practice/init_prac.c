@@ -14,7 +14,14 @@ void	init_philos(t_data *data)
 	i = 0;
 	while (i < data->philo_num)
 	{
-		
+		data->philos[i].data = data;
+		data->philos[i].id = i + 1;
+		data->philos[i].eat_count = 0;
+		data->philos[i].status = 0;
+		data->philos[i].eating = 0;
+		data->philos[i].time_to_die = data->death_time;
+		pthread_mutex_init(&data->philos[i].lock, NULL);
+		i++;
 	}
 }
 

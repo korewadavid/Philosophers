@@ -17,8 +17,13 @@
 
 	A multi-threaded program has multiple sequences of statments (threads) that execute over the same period of time, threads can execute at the same time (parallel execution) or execute in a particular order (concurrent execution), in our case the philosophers (threads) cannot all eat (execute) at the same time because there are not enough forks for them to all eat at the same time, they need 2 forks to eat, so our thread execution needs to be concurrent.
 	
+	
 	race conditions/mutex:
 
+	When writing multi-threaded programs a common problem experienced are race conditions. These occur when two or more threads (in our case, the philosophers), try to access and modify the same variable at the same time
+
+	To solve this we could use a flag locking the code that modifys the variable, if a thread tries to run the block of code but its locked it will wait until the code has been unlocked to run the code, this way the second thread wont overwrite the value of the variable with what it read before waiting. This lock is called Mutex, and in our program the forks will be Mutexs, the philosophers will wait for its left and right fork to be dropped/unlocked so it can eat 
+	
 
 
 2. Project rules and external functions

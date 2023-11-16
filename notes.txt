@@ -1,28 +1,58 @@
 
 1. General project idea / What I learned
 
-	solve dining philosophers problem:
+	- solve dining philosophers problem:
 	
-	The philosophers project is about building a multi-threaded concurrent algorithm for solving the dining philosophers problem. The problem consists of one or more philosophers sitting around a round table, each one has its own plate to eat from and a fork on the left side of the plate, this means there will be a fork on the left and right side of each plate. In order to eat a philosopher needs to use both forks, to stay alive the philosophers must eat, after eating they drop their forks and start sleeping and they think while they wait for their two corresponding forks to be free to eat once again.
+		The philosophers project is about building a multi-threaded concurrent algorithm for solving the dining philosophers problem. 
+	The problem consists of one or more philosophers sitting around a round table, each one has its own plate to eat from and a fork on the left side of the plate, 
+	this means there will be a fork on the left and right side of each plate. In order to eat a philosopher needs to use both forks, 
+	to stay alive the philosophers must eat, after eating they drop their forks and start sleeping and they think while they wait for their 
+	two corresponding forks to be free to eat once again.
 
-	The problem consists in how to create a routine so that no philosopher dies of starvation.
+		The problem consists in how to create a routine so that no philosopher dies of starvation.
 
 	
-	what are threads?:
+	- what are threads?:
 	
-	In the program the philosophers will be threads. A thread is a sequence of statements that executes over time and exists as a subset of a process. A single process/program can contain multiple threads, where they share memory and resources.
+		In the program the philosophers will be threads. A thread is a sequence of statements that executes over time 
+	and exists as a subset of a process. A single process/program can contain multiple threads, where they share 
+	memory and resources.
 	
 	
-	multi-threaded program/concurrent vs parallel execution:
+	- multi-threaded program/concurrent vs parallel execution:
 
-	A multi-threaded program has multiple sequences of statments (threads) that execute over the same period of time, threads can execute at the same time (parallel execution) or execute in a particular order (concurrent execution), in our case the philosophers (threads) cannot all eat (execute) at the same time because there are not enough forks for them to all eat at the same time, they need 2 forks to eat, so our thread execution needs to be concurrent.
+		A multi-threaded program has multiple sequences of statments (threads) that execute over the same period of time, 
+	threads can execute at the same time (parallel execution) or execute in a particular order (concurrent execution)
+	, in our case the philosophers (threads) cannot all eat (execute) at the same time because there are not enough 
+	forks for them to all eat at the same time, they need 2 forks to eat, so our thread execution needs to be 
+	concurrent.
 	
-	race conditions/mutex:
+	
+	- race conditions/mutex:
 
 
 
 2. Project rules and external functions
 
-	summarize global and mandatory rules (program arguments, output messages)
+	- mandatory rules (program arguments, output messages)
 
-	summarize external function used and whats is its purpose in the project
+		• Our program will take 5 arguments from the user, the last one being optional:
+			- philo_num: Number of philosophers for simulation < 200
+			- death_time(ms): Time a philosopher must fast to die
+			- eat_time(ms): Time a philospher takes to eat
+			- sleep_time(ms): ;)
+			- (optional)meals_num: The times a philosopher must eat in order to stop the program
+
+		• Our program must output the changes of state of the philosophers like so:
+			◦ timestamp_in_ms X has taken a fork
+			◦ timestamp_in_ms X is eating
+			◦ timestamp_in_ms X is sleeping
+			◦ timestamp_in_ms X is thinking
+			◦ timestamp_in_ms X died
+	where 'X' is the philosopher number, the messages should not be mixed up with another one.
+
+		• To prevent philosophers from duplicating forks, you should protect the forks state with a mutex for each of them.
+	
+	- summarize external function used and whats is its purpose in the project
+
+		

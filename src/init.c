@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 18:04:39 by damendez          #+#    #+#             */
-/*   Updated: 2023/11/06 16:54:08 by damendez         ###   ########.fr       */
+/*   Updated: 2023/11/17 17:24:35 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int		init_data(t_data *data, int argc, char **argv)
 	// (? What does the write mutex and lock mutex from t_data struct mean/represent?)
 }
 
-void    init_program(t_data *data, int argc, char **argv)
+int    init_program(t_data *data, int argc, char **argv)
 {
 	// Initalize data that comes from input arguments, checking if correct
 	

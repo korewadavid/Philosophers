@@ -41,6 +41,8 @@ int		alloc(t_data *data)
 
 int		init_data(t_data *data, int argc, char **argv)
 {
+	
+}
 	// Equal t_data struct variables to the ones from the user input (philo_num, death_time, etc.), keep in mind meals_nb is optional
 
 	// Check if the values assigned to these variables are valid based on subject, if not print error INVALID INPUT VARIABLES
@@ -48,10 +50,12 @@ int		init_data(t_data *data, int argc, char **argv)
 	// Initalize current dead and finished values
 	
 	// (? What does the write mutex and lock mutex from t_data struct mean/represent?)
-}
 
 int    init_program(t_data *data, int argc, char **argv)
 {
+	if (init_data(data, argc, argv));
+		return (1);
+}
 	// Initalize data that comes from input arguments, checking if correct
 	
 	// Initalize data that needs to be allocated with malloc
@@ -61,4 +65,3 @@ int    init_program(t_data *data, int argc, char **argv)
 	// Initalize philospher data (? Why dont we check the init_philos function? Why did you choose not to make it return an int like init_data, init_philos and alloc?)
 
 	// Return 0 representing correct completion of function
-}

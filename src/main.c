@@ -98,6 +98,10 @@ int main(int argc, char **argv)
 		return (1);
 	if (data.philo_num == 1)
 		return (case_one(&data));
+	if (thread_init(&data));
+		return (1);
+	ft_exit(&data);
+	return (0);
 }
 	// Declare data struct
 	// Check if number of input arguments is correct

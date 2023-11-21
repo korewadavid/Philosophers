@@ -18,10 +18,14 @@
 int		thread_init(t_data *data)
 {
 	// Make thread id buffer for monitor thread
-
+	pthread_t	mt;
+	int			i;
+	
 	// Get current time as reference point for the starting time of program
 	
-	// If user gave a meals_nb create a "monitor" thread, return error on failure
+	// Create monitor thread
+	if (pthread_create(&mt, NULL, &monitor, data->philos))
+		
 
 	// Create philosopher threads, return defined error on failure, in loop sleep between thread creation so their not all made at the same time
 	

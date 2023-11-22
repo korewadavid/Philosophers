@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 15:57:58 by damendez          #+#    #+#             */
-/*   Updated: 2023/11/17 17:24:32 by damendez         ###   ########.fr       */
+/*   Updated: 2023/11/22 16:02:25 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 void	clear_data(t_data *data)
 {
-	if (data->tid)
-		free(data->tid);
 	if (data->philos)
 		free(data->philos);
 	if (data->forks)
@@ -94,19 +92,10 @@ int main(int argc, char **argv)
 		return (1);
 	if (parse_input(&data, argv));
 		return (1);
-	if (init_program(&data, argc, argv));
+	if (data_init(&data));
 		return (1);
-	if (data.philo_num == 1)
-		return (case_one(&data));
-	if (thread_init(&data));
+	if (threads_init(&data));
 		return (1);
 	ft_exit(&data);
 	return (0);
 }
-	// Declare data struct
-	// Check if number of input arguments is correct
-	// Check if user input is correct (philo_num, death_time, eat_time, sleept_time) and check optional fifth argument meals_num
-	// Initiate program structures (here we also check if input values are correct)
-	// Run specific code in the case of one philosopher
-	// Initiate threads for philosophers
-	// Exit program by clearing all data once finished

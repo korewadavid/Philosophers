@@ -12,10 +12,14 @@
 
 #ifndef PHILO_H
 # define PHILO_H
-#include <pthread.h> // threads library
-#include <unistd.h> // write()
-#include <stdio.h> //stdin/stdout/printf
-#include <sys/time.h>
+
+#include <stdio.h> // printf
+#include <stdlib.h> // malloc free
+#include <unistd.h> // write usleep
+#include <stdbool.h> // bools
+#include <pthread.h> // threads and mutex
+#include <sys/time.h> //gettimeofday
+#include <limits.h> // checking inputs
 
 # define ERR_IN_1 "Error Invalid Input Character"
 # define ERR_IN_2 "Error Invalid Input Values"
@@ -29,35 +33,39 @@
 
 # define MAX_NUM_PHILO 200
 
+typedef struct s_data	t_data;
+
+typedef struct s_fork
+{
+	pthread_mutex_t	fork;
+	int fork_id
+}				t_fork;
+
 typedef struct s_philo
 {
-	struct s_data	*data; // pointer to general data stucture
-    pthread_t       thread;
-    int             id;
-	int				eat_count;
-	int				status;
-	int				eating;
-	uint64_t		time_to_die;
-	pthread_mutex_t	lock;
-    pthread_mutex_t *r_fork; // pointer to right forks mutex
-    pthread_mutex_t *l_fork;
-}               t_philo;
+	int			philo_id;
+	long		eat_count;
+	bool		full;
+	long		last_meal_time;
+	t_fork		*left_fork;
+	t_fork		*right_fork;
+	pthread_t	thread_id;
+	t_data		*data;
+}				t_philo;
 
-typedef struct s_data
+// ./philo 5 800 200 200
+
+struct s_data
 {
-	pthread_t		*tid; // thread identifier, there should be one per philo
-	int				philo_num; // number of philosophers
-	int				meals_nb; // number of meals each philosopher is expected to eat
-	int				dead;
-	int				finished; // if all the philosophers have finished eating
-	t_philo         *philos;
-	u_int64_t		death_time;
-	u_int64_t		eat_time;
-	u_int64_t		sleep_time;
-	u_int64_t		start_time;
-	pthread_mutex_t	*forks;
-	pthread_mutex_t lock;
-	pthread_mutex_t	write; // controlls access to writing to the output
-}               t_data;
+	long	philo_nbr;
+	long	time_to_die;
+	long	time_to_eat;
+	long	time_to_sleep;
+	long	nbr_max_meals;
+	long	start_time;
+	bool	end_program; // if a philo dies or philos are full
+	t_fork	*forks;
+	t_philo	*philos;
+}				t_data;
 
 #endif

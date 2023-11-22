@@ -92,7 +92,7 @@ int main(int argc, char **argv)
 	
 	if (argc < 5 || argc > 6)
 		return (1);
-	if (check_input(argc, argv));
+	if (parse_input(&data, argv));
 		return (1);
 	if (init_program(&data, argc, argv));
 		return (1);

@@ -68,12 +68,24 @@ static long	ft_atol(const char *str)
 	return (num); 
 }
 
-/*
+/*                    ms      ms    ms
+ * ./philo   5       800     200   200   [4]
+ *        argv[1]  argv[2]  ...
  * 1. check if input are actual numbers
- * 2. not > INT_MAX
- * 3. timestamps > 60ms ??
+ * 2. Check INT_MAX overflow
+ * 3. timestamps > 60ms ?
+ * user gives times in miliseconds, but usleep wants microseconds,
+ * 1 ms = 100
  */
 int	parse_input(t_data *data, char **argv)
 {
 	data->philo_num = ft_atol(argv[1]);
+	data->time_to_die = ft_atol(argv[2]) * 1000;
+	data->time_to_eat = ft_atol(argv[3]) * 1000;
+	data->time_to_sleep = ft_atol(argv[4]) * 1000;
+	if (argv[5])
+		data->nbr_max_meals = ft_atol(argv[5]);
+	else
+		data->nbr_max_meals = -1;
+	return (0);
 }

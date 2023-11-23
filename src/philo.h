@@ -24,6 +24,7 @@
 # define ERR_IN_1 "Error Invalid Input Character"
 # define ERR_IN_2 "Error Invalid Input Values"
 
+# define ALLOC_ERR "Malloc error"
 # define ALLOC_ERR_1 "Error while allocating: Thread IDs"
 # define ALLOC_ERR_2 "Error while allocating: Forks"
 # define ALLOC_ERR_3 "Error while allocating: Philos"
@@ -67,5 +68,10 @@ struct s_data
 	t_fork	*forks;
 	t_philo	*philos;
 }				t_data;
+
+// *** Prototypes ***
+
+// *** parsing ***
+void 
 
 #endif

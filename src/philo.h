@@ -19,10 +19,13 @@
 #include <stdbool.h> // bools
 #include <pthread.h> // threads and mutex
 #include <sys/time.h> //gettimeofday
-#include <limits.h> // checking inputs
+#include <limits.h> // intmax overflow
+#include <errno.h> // safe functions
 
 # define ERR_IN_1 "Error Invalid Input Character"
 # define ERR_IN_2 "Error Invalid Input Values"
+
+# define OP_MUTEX_ERR "Wrong opcode for mutex handle"
 
 # define ALLOC_ERR "Malloc error"
 # define ALLOC_ERR_1 "Error while allocating: Thread IDs"
@@ -33,6 +36,17 @@
 # define JOIN_ERR "Error while joining: Threads"
 
 # define MAX_NUM_PHILO 200
+
+typedef enum e_opcode
+{
+	LOCK,
+	UNLOCK,
+	INIT,
+	DESTORY,
+	CREATE,
+	JOIN,
+	DETACH,
+}					t_opcode;
 
 typedef struct s_data	t_data;
 

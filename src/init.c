@@ -12,12 +12,49 @@
 
 #include "philo.h"
 
+/*
+ * Even | Odd fork assigment
+*/
+
+static void	assign_forks(t_philo *philo, t_fork *forks, int philo_position)
+{
+	int philo_nbr;
+
+	philo_nbr = philo->table->philo_nbr;
+
+	if (philo->philo_id % 2)
+	{
+		philo->first_fork = forks[philo_position];
+		if (philo->philo_id == philo_nbr)
+			philo->second_fork = forks[(philo_position + 1) % philo_nbr];
+		else
+			philo->second_fork = forks[philo_position + 1];	
+	}
+	else
+	{
+		if (philo->philo_id == philo_nbr)
+			philo->first_fork = forks[(philo_position + 1) % philo_nbr];
+		else
+			philo->first_fork = forks[philo_position + 1];
+		philo->second_fork = forks[philo_position];
+	}
+}
+
 static void	philo_init(t_data *data)
 {
 	int	i;
+	t_philo *philo;
 
 	i = -1;
-	while (++i < da)
+	while (++i < data->philo_nbr)
+	{
+		philo = table->philo + i;
+		philo->philo_id = i + 1;
+		philo->full = false;
+		philo->eat_count = 0;
+		philo->data = data;
+		assign_forks(philo, data->forks, i);
+	}
 }
 
 void	init_data(t_data *data)

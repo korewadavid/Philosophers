@@ -78,7 +78,7 @@ struct s_data
 	long	time_to_sleep;
 	long	nbr_max_meals;
 	long	start_time;
-	bool	end_program; // if a philo dies or philos are full
+	bool	end_simulation; // if a philo dies or philos are full
 	bool	all_threads_ready; // for synchronizing th start of the philos
 	pthread_mutex_t data_mutex; // avoid race conditions when reading from data
 	t_fork	*forks;

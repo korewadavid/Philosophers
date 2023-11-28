@@ -19,7 +19,6 @@ void	clear_data(t_data *data)
 	if (data->forks)
 		free(data->forks);
 }
-	// if allocated memory pointers in data struct are present, free() them
 
 void	ft_exit(t_data *data)
 {
@@ -35,11 +34,6 @@ void	ft_exit(t_data *data)
 	pthread_mutex_destory(&data->write);
 	clear_data(&data);
 }
-	// for each philosopher, eliminate forks and philo lock mutexs
-
-	// eliminate the remaining mutexes in data struct
-
-	// call clear_data
 
 int	error(char *err, t_data *data)
 {
@@ -48,11 +42,6 @@ int	error(char *err, t_data *data)
 		ft_exit(data);
 	return (1);
 }
-	// Print error message
-
-	// If data pointer was passed as paramter eliminate data stored
-
-	// Return error value 1
 
 int main(int argc, char **argv)
 {

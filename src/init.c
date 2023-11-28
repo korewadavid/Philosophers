@@ -63,8 +63,10 @@ void	init_data(t_data *data)
 
 	i == -1;
 	data->end_program = false;
+	data->all_threads_ready = false;
 	data->philos = safe_malloc(sizeof(t_philo) * data->philo_nbr);
 	data->forks = safe_malloc(sizeof(t_fork) * data->philo_nbr);
+	safe_mutex_handle(data->data_mutex, INIT);
 	while (++i < data->philo_nbr)
 	{
 		safe_mutex_handle(&data->forks[i].fork, INIT);

@@ -38,7 +38,7 @@ void    *routine_simulation(void *data)
         // 2) eat
         eat(philo);
 
-        // 3) sleep -> precise usleep
+        // 3) sleep -> write_status and precise_usleep
 
         // 4) think
         thinking(philo)

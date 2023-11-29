@@ -37,6 +37,16 @@
 
 # define MAX_NUM_PHILO 200
 
+typedef enum e_status
+{
+	EATING,
+	SLEEPING,
+	THINKING,
+	TAKE_FIRST_FORK,
+	TAKE_SECOND_FORK,
+	DIED,
+}					t_philo_status;
+
 typedef enum e_opcode
 {
 	LOCK,
@@ -75,6 +85,7 @@ typedef struct s_philo
 	t_fork		*first_fork;
 	t_fork		*second_fork;
 	pthread_t	thread_id;
+	pthread_mutex_t philo_mutex; // useful for race cond with the monitor thread
 	t_data		*data;
 }				t_philo;
 
@@ -91,6 +102,7 @@ struct s_data
 	bool	end_simulation; // if a philo dies or philos are full
 	bool	all_threads_ready; // for synchronizing th start of the philos
 	pthread_mutex_t data_mutex; // avoid race conditions when reading from data
+	pthread_mutex_t write_mutex;
 	t_fork	*forks;
 	t_philo	*philos;
 }				t_data;

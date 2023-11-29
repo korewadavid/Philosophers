@@ -13,10 +13,30 @@
 #include "philo.h"
 
 /*
+ * eat routine
+ * 
+ * 1) grab the forks (first and second)
+ * 2) eat: write eat, update last meal time, updeat meal_counter
+ *      eventually change the status of bool full
+ * 3) release the forks
+*/
+
+static void eat(t_philo *philo)
+{
+    // 1)
+    safe_mutex_handle(philo->first_fork->fork, LOCK);
+    write_status(TAKE_FIRST_FORK, philo, DEBUG_MODE);
+    safe_mutex_handle(&philo->second_fork->fork, LOCK);
+    write_status(TAKE_SECOND_FORK, philo, DEBUG_MODE);
+
+    // 2) set last meal time,  
+    set_long()
+}
+
+/*
  * 0) wait all philos, synchro start
  * 1) endless loop philo
 */
-
 void    *routine_simulation(void *data)
 {
     t_philo *philo;
@@ -38,7 +58,7 @@ void    *routine_simulation(void *data)
         // 2) eat
         eat(philo);
 
-        // 3) sleep -> write_status and precise_usleep
+        // 3) sleep -> write_status (TO-DO) and precise_usleep
 
         // 4) think
         thinking(philo)

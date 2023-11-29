@@ -12,7 +12,61 @@
 
 #include "src/philo.h"
 
-int		ft_usleep(useconds_t time)
+/*
+ * gettimeofday
+ * time_code -> philo.h enum
+*/
+long    gettime(t_time_code time_code)
 {
+    struct timeval  tv;
 
+    if (gettimeofday(&tv, NULL))
+        error_exit("Gettimeofday failed");
+    if (time_code == SECOND)
+        return (tv.tv_sec + (tv.tv_usec / 1e6));
+    else if (time_code == MILLISECOND)
+        return ((tv.tv_sec * 1e3) + (tv.tv_usec / 1e3));
+    else if (time_code == MICROSECOND)
+        return ((tv.tv_sec * 1e6) + tv.tv_usec);
+    else
+        error_exit("Wrong input to gettime().");
+    return (1);
+}
+
+/*
+ * precise usleep, og one is inaccurate (can sleep more time then expected).
+ * 
+ * is the simulation finished?
+ * 
+ * 1) usleep the majority of the time
+ * 2) last microseconds will be waited with spinlock
+*/
+void    precise_usleep(long usec, t_data *data)
+{
+    long start;
+    long elapsed;
+    long remaining;
+
+    start = gettime(MICROSECOND);
+    while (gettime(MICROSECOND) - start < usec)
+    {
+        if (simulation_finished(data))
+            break ;
+        elapsed = gettime(MICROSECOND) - start;
+        remaining = usec - elapsed;
+        if (remaining > 1e3)
+            usleep(remaining / 2);
+        else
+        {
+            while (gettime(MICROSECOND) - start < usec)
+                ;
+        }
+
+    }
+}
+
+void    error_exit(const char *error)
+{
+    printf("%s\n", error);
+    exit(EXIT_FAILURE);
 }

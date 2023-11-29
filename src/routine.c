@@ -23,7 +23,26 @@ void    *routine_simulation(void *data)
 
     philo = (t_philo *)data;
 
-    wait_all_threads(philo->data); // TO-DO
+    // spinlock: the threads will loop/wait until the all_threads_ready flag is set to true 
+    wait_all_threads(philo->data);
+
+    // set last meal time
+
+
+    while (!simulation_finished(philo->data))
+    {
+        // 1) Check if philo is full
+        if (philo->full) // TO-DO, might have to protect with mutex
+            break;
+        
+        // 2) eat
+        eat(philo);
+
+        // 3) sleep -> precise usleep
+
+        // 4) think
+        thinking(philo)
+    }
     return (NULL);
 }
 
@@ -50,7 +69,14 @@ void    start_routine(t_data *data)
         while (++i < data->philo_nbr)
             safe_thread_handle(&data->philos[i].thread_id, routine_simulation, &data->philos[i], CREATE);
     }
+    // start the simulation
+    data->start_time = gettime(MILLISECOND);
 
     // now all threads are ready
-    
+    set_bool(&data->data_mutex, &data->all_threads_ready, true);
+
+    // wait for everyone/all philos
+    i = -1;
+    while (++i < data->philo_nbr)
+        safe_thread_handle(&data->philos[i].thread_id, NULL, NULL, JOIN);
 }

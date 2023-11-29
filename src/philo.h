@@ -48,6 +48,16 @@ typedef enum e_opcode
 	DETACH,
 }					t_opcode;
 
+// Codes for gettime()
+typedef enum e_time_code
+{
+	SECOND,
+	MILLISECOND,
+	MICROSECOND,
+}					t_time_code;
+
+// *** STRUCTS ***
+
 typedef struct s_data	t_data;
 
 typedef struct s_fork

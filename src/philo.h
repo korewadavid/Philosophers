@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 16:00:36 by damendez          #+#    #+#             */
-/*   Updated: 2023/11/27 16:51:58 by damendez         ###   ########.fr       */
+/*   Updated: 2023/11/30 17:13:41 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ struct s_data
 	long			start_time;
 	bool			end_simulation; // if a philo dies or philos are full
 	bool			all_threads_ready; // for synchronizing th start of the philos
+	long			threads_running_nbr;
 	pthread_t		monitor;
 	pthread_mutex_t data_mutex; // avoid race conditions when reading from data
 	pthread_mutex_t write_mutex;

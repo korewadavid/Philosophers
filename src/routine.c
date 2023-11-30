@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 16:28:22 by damendez          #+#    #+#             */
-/*   Updated: 2023/11/30 16:08:01 by damendez         ###   ########.fr       */
+/*   Updated: 2023/11/30 17:13:03 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ void    *routine_simulation(void *data)
 
     // spinlock: the threads will loop/wait until the all_threads_ready flag is set to true 
     wait_all_threads(philo->data);
+
+
 
     // set last meal time
 

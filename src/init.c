@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 18:04:39 by damendez          #+#    #+#             */
-/*   Updated: 2023/11/30 16:00:12 by damendez         ###   ########.fr       */
+/*   Updated: 2023/11/30 16:44:39 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void	init_data(t_data *data)
 	i == -1;
 	data->end_program = false;
 	data->all_threads_ready = false;
+	data->threads_running_nbr = 0;
 	data->philos = safe_malloc(sizeof(t_philo) * data->philo_nbr);
 	data->forks = safe_malloc(sizeof(t_fork) * data->philo_nbr);
 	safe_mutex_handle(data->data_mutex, INIT);

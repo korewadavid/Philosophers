@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 16:28:22 by damendez          #+#    #+#             */
-/*   Updated: 2023/11/28 16:28:22 by damendez         ###   ########.fr       */
+/*   Updated: 2023/11/30 16:08:01 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static void eat(t_philo *philo)
     philo->eat_count++;
     write_status(EATING, philo, DEBUG_MODE); // TO-DO
     precise_usleep(philo->data->time_to_eat, philo->data);
-    // Internal check see if philo is full=
+    // Internal check see if philo is full
     if (philo->data->nbr_max_meals > 0 
         && philo->eat_count == philo->data->nbr_max_meals)
         set_bool(&philo->philo_mutex, &philo->full, true);
@@ -75,6 +75,7 @@ void    *routine_simulation(void *data)
         eat(philo);
 
         // 3) sleep -> write_status (TO-DO) and precise_usleep
+		
 
         // 4) think
         thinking(philo)

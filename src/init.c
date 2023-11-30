@@ -22,7 +22,7 @@ static void	assign_forks(t_philo *philo, t_fork *forks, int philo_position)
 
 	philo_nbr = philo->table->philo_nbr;
 
-	if (philo->philo_id % 2)
+	if (philo->philo_id % 2 == 0)
 	{
 		philo->first_fork = forks[philo_position];
 		if (philo->philo_id == philo_nbr)
@@ -48,11 +48,12 @@ static void	philo_init(t_data *data)
 	i = -1;
 	while (++i < data->philo_nbr)
 	{
-		philo = table->philo + i;
+		philo = data->philo + i;
 		philo->philo_id = i + 1;
 		philo->full = false;
 		philo->eat_count = 0;
 		philo->data = data;
+		safe_mutex_handle(&philo->philo_mutex, INIT);
 		assign_forks(philo, data->forks, i);
 	}
 }

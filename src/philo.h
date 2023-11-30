@@ -93,18 +93,19 @@ typedef struct s_philo
 
 struct s_data
 {
-	long	philo_nbr;
-	long	time_to_die;
-	long	time_to_eat;
-	long	time_to_sleep;
-	long	nbr_max_meals;
-	long	start_time;
-	bool	end_simulation; // if a philo dies or philos are full
-	bool	all_threads_ready; // for synchronizing th start of the philos
+	long			philo_nbr;
+	long			time_to_die;
+	long			time_to_eat;
+	long			time_to_sleep;
+	long			nbr_max_meals;
+	long			start_time;
+	bool			end_simulation; // if a philo dies or philos are full
+	bool			all_threads_ready; // for synchronizing th start of the philos
+	pthread_t		monitor;
 	pthread_mutex_t data_mutex; // avoid race conditions when reading from data
 	pthread_mutex_t write_mutex;
-	t_fork	*forks;
-	t_philo	*philos;
+	t_fork			*forks;
+	t_philo			*philos;
 }				t_data;
 
 // *** Prototypes ***

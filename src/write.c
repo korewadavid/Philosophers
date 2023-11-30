@@ -13,19 +13,28 @@
 #include "philo.h"
 
 /*
- * [time in ms] [philo_id] [action]
+ * writes philo status in a thread safe way
  * 
- * thread safe, we need a lock so only one message appears at a time
+ * 1) if philo is full return
+ * 2) debig version (?)
+ * 3) write status sent to function
 */
 
-void    write_status(t_philo_status status, t_philo *philo)
+void    write_status(t_philo_status status, t_philo *philo, bool debug)
 {
     long    elapsed;
 
-    elapsed = gettime(MILLISECOND) - philo->data->start_time;
-    safe_mutex_handle(&philo->data->write_mutex, LOCK);
-    if ((TAKE_FIRST_FORK == status || TAKE_SECOND_FORK == status) 
-        && !simulation_finished(philo->data))
-        printf(W"%-6ld"RST" %d has taken a fork\n", elapsed, philo->id);
-    safe_mutex_handle(&philo->data->write_mutex, UNLOCK);
+    elapsed = gettime(MICROSECOND) - philo->data->start_time;
+
+    if (philo->full)
+        return ;
+    safe_mutex_handle(&philo->data->write_mutex, LOCK)
+    {
+        if (debug) // TO-DO
+            write_status_debug(status, philo, elapsed);
+        else
+        {
+            if ((status == TAKE_FIRST_FORK || status == TAKE_SECOND_FORK))
+        }
+    }
 }

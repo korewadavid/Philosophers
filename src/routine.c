@@ -12,6 +12,12 @@
 
 #include "philo.h"
 
+// TO-DO (time to think we can model, other times are fixed from input)
+static void thinking(t_philo *philo)
+{
+    write_status(THINKING, philo, DEBUG_MODE);
+}
+
 /*
  * eat routine
  * 
@@ -20,7 +26,6 @@
  *      eventually change the status of bool full
  * 3) release the forks
 */
-
 static void eat(t_philo *philo)
 {
     // 1)
@@ -29,8 +34,19 @@ static void eat(t_philo *philo)
     safe_mutex_handle(&philo->second_fork->fork, LOCK);
     write_status(TAKE_SECOND_FORK, philo, DEBUG_MODE);
 
-    // 2) set last meal time,  
-    set_long()
+    // 2)
+    set_long(&philo->philo_mutex, &philo->last_meal_time, gettime(MILLISECOND));
+    philo->eat_count++;
+    write_status(EATING, philo, DEBUG_MODE); // TO-DO
+    precise_usleep(philo->data->time_to_eat, philo->data);
+    // Internal check see if philo is full=
+    if (philo->data->nbr_max_meals > 0 
+        && philo->eat_count == philo->data->nbr_max_meals)
+        set_bool(&philo->philo_mutex, &philo->full, true);
+    
+    // 3)
+    safe_mutex_handle(&philo->first_fork, UNLOCK);
+    safe_mutex_handle(&philo->second_fork, UNLOCK);
 }
 
 /*
@@ -89,6 +105,9 @@ void    start_routine(t_data *data)
         while (++i < data->philo_nbr)
             safe_thread_handle(&data->philos[i].thread_id, routine_simulation, &data->philos[i], CREATE);
     }
+    // monitor thread
+    safe_thread_handle(&data->monitor, monitor_routine, data, CREATE); // TO-DO
+
     // start the simulation
     data->start_time = gettime(MILLISECOND);
 

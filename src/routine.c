@@ -19,6 +19,26 @@ static void thinking(t_philo *philo)
 }
 
 /*
+ * similar to routine_simulation
+ * 
+ * 1) fake lock the fork
+ * 2) sleep until the monitor will bust it
+*/
+void    *lone_philo(void *arg)
+{
+    t_philo *philo;
+
+    philo = (t_philo *)arg;
+    wait_all_threads(philo->data);
+    set_long(philo->philo_mutex, &philo->last_meal_time, gettime(MILLISECONDS));
+    increase_long(&philo->data->data_mutex, &philo->data->threads_running_nbr);
+    write_status(TAKE_FIRST_FORK, philo, DEBUG_MODE);
+    while (!simulation_finished(philo->data))
+        usleep(200);
+    return (NULL);
+}
+
+/*
  * eat routine
  * 
  * 1) grab the forks (first and second)
@@ -62,11 +82,13 @@ void    *routine_simulation(void *data)
     // spinlock: the threads will loop/wait until the all_threads_ready flag is set to true 
     wait_all_threads(philo->data);
 
-
-
     // set last meal time
-
-
+    set_long(&philo->philo_mutex, &philo->last_meal_time, gettime(MILLISECOND));
+    
+    // update threads_running_nbr so the monitor knows when to start
+    increase_long(&philo->data->data_mutex, 
+            &philo->data->threads_running_nbr);
+    
     while (!simulation_finished(philo->data))
     {
         // 1) Check if philo is full
@@ -77,7 +99,8 @@ void    *routine_simulation(void *data)
         eat(philo);
 
         // 3) sleep -> write_status (TO-DO) and precise_usleep
-		
+		write_status(SLEEPING, philo, DEBUG_MODE); // TO-DO
+        precise_usleep(philo->data->time_to_sleep, philo->data);
 
         // 4) think
         thinking(philo)
@@ -102,7 +125,7 @@ void    start_routine(t_data *data)
     if (data->nbr_max_meals == 0)
         return ;
     else if (data->philo_nbr == 1)
-        ; // TODO
+        safe_thread_handle(&data->philos[0].thread_id, lone_philo, &data->philos[0], CREATE);
     else
     {
         while (++i < data->philo_nbr)
@@ -121,4 +144,6 @@ void    start_routine(t_data *data)
     i = -1;
     while (++i < data->philo_nbr)
         safe_thread_handle(&data->philos[i].thread_id, NULL, NULL, JOIN);
+    set_bool(&data->data_mutex, &data->end_simulation, true)
+    safe_thread_handle(&data->monitor, NULL, NULL, JOIN);
 }

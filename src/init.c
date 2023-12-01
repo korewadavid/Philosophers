@@ -68,11 +68,12 @@ void	init_data(t_data *data)
 	data->threads_running_nbr = 0;
 	data->philos = safe_malloc(sizeof(t_philo) * data->philo_nbr);
 	data->forks = safe_malloc(sizeof(t_fork) * data->philo_nbr);
-	safe_mutex_handle(data->data_mutex, INIT);
+	safe_mutex_handle(&data->data_mutex, INIT);
+	safe_mutex_handle(&data->write_mutex, INIT);
 	while (++i < data->philo_nbr)
 	{
 		safe_mutex_handle(&data->forks[i].fork, INIT);
 		data->forks[i].fork_id = i;
 	}
-	philo_init(data) //TO-DO
+	philo_init(data)
 }

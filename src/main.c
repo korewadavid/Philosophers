@@ -12,37 +12,6 @@
 
 #include "philo.h"
 
-void	clear_data(t_data *data)
-{
-	if (data->philos)
-		free(data->philos);
-	if (data->forks)
-		free(data->forks);
-}
-
-void	ft_exit(t_data *data)
-{
-	int i;
-
-	i = 0;
-	while (i < data->philo_num)
-	{
-		pthread_mutex_destroy(&data->forks[i]);
-		pthread_mutex_destory(&data->philos[i].lock);
-	}
-	pthread_mutex_destory(&data->lock);
-	pthread_mutex_destory(&data->write);
-	clear_data(&data);
-}
-
-int	error(char *err, t_data *data)
-{
-	printf("%s\n", err);
-	if (data)
-		ft_exit(data);
-	return (1);
-}
-
 int main(int argc, char **argv)
 {
 	t_data data;
@@ -55,6 +24,6 @@ int main(int argc, char **argv)
 		ft_clean(&data);
 	}
 	else
-		error(ERR_IN_1);
+		error_exit(ERR_IN_1);
 	return (0);
 }

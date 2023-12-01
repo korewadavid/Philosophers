@@ -46,10 +46,9 @@ static const char	*valid_input(const char *str)
 		error(ERR_IN_1, NULL);
 	if (!is_digit(*str))
 		error(ERR_IN_1, NULL);
-	number = str; // now return pointer is pointing to the first input digit
+	number = str;
 	while (is_digit(*str++))
 		++len;
-	// check INT_MAX
 	if (len > 10)
 		error(ERR_IN_2, NULL);
 	return (number);
@@ -64,7 +63,7 @@ static long	ft_atol(const char *str)
 	while (is_digit(*str))
 		num = (num * 10) + (*str++ - '0');
 	if (num > INT_MAX)
-		error(ERR_IN_2, NULL);
+		error_exit(ERR_IN_2, NULL);
 	return (num); 
 }
 
@@ -75,17 +74,27 @@ static long	ft_atol(const char *str)
  * 2. Check INT_MAX overflow
  * 3. timestamps > 60ms ?
  * user gives times in miliseconds, but usleep wants microseconds,
- * 1 ms = 100
+ * 1 ms = 1000 µ
  */
-int	parse_input(t_data *data, char **argv)
+void	parse_input(t_data *data, char **argv)
 {
-	data->philo_num = ft_atol(argv[1]);
-	data->time_to_die = ft_atol(argv[2]) * 1000;
-	data->time_to_eat = ft_atol(argv[3]) * 1000;
-	data->time_to_sleep = ft_atol(argv[4]) * 1000;
+	data->philo_nbr = ft_atol(argv[1]);
+	if (data->philo_nbr > PHILO_MAX)
+	{
+		printf("Max philo_nbr is %d\n, 
+		make fclean and re-make with PHILO_MAX=nbr to change it\n",
+			PHILO_MAX);
+		exit(EXIT_FAILURE);
+	}
+	data->time_to_die = ft_atol(argv[2]) * 1e3;
+	data->time_to_eat = ft_atol(argv[3]) * 1e3;
+	data->time_to_sleep = ft_atol(argv[4]) * 1e3;
+	if (data->time_to_die < 6e4
+		|| data->time_to_sleep < 6e4
+		|| data->time_to_eat < 6e4)
+		error_exit("Use timestamps > 60ms");
 	if (argv[5])
 		data->nbr_max_meals = ft_atol(argv[5]);
 	else
 		data->nbr_max_meals = -1;
-	return (0);
 }

@@ -131,16 +131,9 @@ void    start_routine(t_data *data)
         while (++i < data->philo_nbr)
             safe_thread_handle(&data->philos[i].thread_id, routine_simulation, &data->philos[i], CREATE);
     }
-    // monitor thread
-    safe_thread_handle(&data->monitor, monitor_routine, data, CREATE); // TO-DO
-
-    // start the simulation
+    safe_thread_handle(&data->monitor, monitor_routine, data, CREATE);
     data->start_time = gettime(MILLISECOND);
-
-    // now all threads are ready
-    set_bool(&data->data_mutex, &data->all_threads_ready, true);
-
-    // wait for everyone/all philos
+    set_bool(&data->data_mutex, &data->all_threads_ready, true); 
     i = -1;
     while (++i < data->philo_nbr)
         safe_thread_handle(&data->philos[i].thread_id, NULL, NULL, JOIN);

@@ -34,7 +34,7 @@ void    *lone_philo(void *arg)
     increase_long(&philo->data->data_mutex, &philo->data->threads_running_nbr);
     write_status(TAKE_FIRST_FORK, philo, DEBUG_MODE);
     while (!simulation_finished(philo->data))
-        usleep(200);
+        precise_usleep(200, philo->data);
     return (NULL);
 }
 
@@ -56,10 +56,9 @@ static void eat(t_philo *philo)
 
     // 2)
     set_long(&philo->philo_mutex, &philo->last_meal_time, gettime(MILLISECOND));
-    philo->eat_count++;
-    write_status(EATING, philo, DEBUG_MODE); // TO-DO
+    increase_long(&philo->philo_mutex, &philo->eat_count) // DIFERENT FROM ANSWER
+    write_status(EATING, philo, DEBUG_MODE);
     precise_usleep(philo->data->time_to_eat, philo->data);
-    // Internal check see if philo is full
     if (philo->data->nbr_max_meals > 0 
         && philo->eat_count == philo->data->nbr_max_meals)
         set_bool(&philo->philo_mutex, &philo->full, true);
@@ -79,29 +78,21 @@ void    *routine_simulation(void *data)
 
     philo = (t_philo *)data;
 
-    // spinlock: the threads will loop/wait until the all_threads_ready flag is set to true 
     wait_all_threads(philo->data);
-
-    // set last meal time
     set_long(&philo->philo_mutex, &philo->last_meal_time, gettime(MILLISECOND));
-    
-    // update threads_running_nbr so the monitor knows when to start
     increase_long(&philo->data->data_mutex, 
             &philo->data->threads_running_nbr);
-    
+    de_synchronize_philos(philo); // TO-DO
     while (!simulation_finished(philo->data))
     {
         // 1) Check if philo is full
-        if (philo->full) // TO-DO, might have to protect with mutex
-            break;
-        
+        if (get_bool(&philo->philo_mutex, &philo->full))
+            break ;
         // 2) eat
         eat(philo);
-
-        // 3) sleep -> write_status (TO-DO) and precise_usleep
-		write_status(SLEEPING, philo, DEBUG_MODE); // TO-DO
+        // 3) sleep
+		write_status(SLEEPING, philo, DEBUG_MODE);
         precise_usleep(philo->data->time_to_sleep, philo->data);
-
         // 4) think
         thinking(philo)
     }

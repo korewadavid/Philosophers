@@ -42,3 +42,11 @@ void	increase_long(pthread_mutex_t *mutex, long *value)
 	(*value)++;
 	safe_mutex_handle(mutex, UNLOCK);
 }
+
+/*
+ * Make the system fair for philos
+*/
+void	de_synchronize_philos(t_philo *philo)
+{
+	
+}

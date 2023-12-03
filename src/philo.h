@@ -22,21 +22,17 @@
 #include <limits.h> // intmax overflow
 #include <errno.h> // safe functions
 
-# define ERR_IN_1 "Error Invalid Input Character"
-# define ERR_IN_2 "Error Invalid Input Values"
+# ifndef DEBUG_MODE
+#	define DEBUG_MODE 0
+# endif
 
-# define OP_MUTEX_ERR "Wrong opcode for mutex handle"
+# ifndef PHILO_MAX
+#  define PHILO_MAX 200 
+# endif
 
-# define ALLOC_ERR "Malloc error"
-# define ALLOC_ERR_1 "Error while allocating: Thread IDs"
-# define ALLOC_ERR_2 "Error while allocating: Forks"
-# define ALLOC_ERR_3 "Error while allocating: Philos"
-
-# define TH_ERR "Error while creating: Threads"
-# define JOIN_ERR "Error while joining: Threads"
-
-# define MAX_NUM_PHILO 200
-
+/*
+ * Philosopher states for write
+*/
 typedef enum e_status
 {
 	EATING,
@@ -47,6 +43,9 @@ typedef enum e_status
 	DIED,
 }					t_philo_status;
 
+/*
+ * Enum for safe mutex and thread handle functions
+*/
 typedef enum e_opcode
 {
 	LOCK,
@@ -58,13 +57,27 @@ typedef enum e_opcode
 	DETACH,
 }					t_opcode;
 
-// Codes for gettime()
+/*
+ * Units of time for gettime()
+*/
 typedef enum e_time_code
 {
 	SECOND,
 	MILLISECOND,
 	MICROSECOND,
 }					t_time_code;
+
+/*
+ * Colors for debug output
+*/
+# define RST    "\033[0m"      /* Reset to default color */
+# define RED	"\033[1;31m"   /* Bold Red */
+# define G      "\033[1;32m"   /* Bold Green */
+# define Y      "\033[1;33m"   /* Bold Yellow */
+# define B      "\033[1;34m"   /* Bold Blue */
+# define M      "\033[1;35m"   /* Bold Magenta */
+# define C      "\033[1;36m"   /* Bold Cyan */
+# define W      "\033[1;37m"   /* Bold White */
 
 // *** STRUCTS ***
 
@@ -73,20 +86,20 @@ typedef struct s_data	t_data;
 typedef struct s_fork
 {
 	pthread_mutex_t	fork;
-	int fork_id
+	int				fork_id
 }				t_fork;
 
 typedef struct s_philo
 {
-	int			philo_id;
-	long		eat_count;
-	bool		full;
-	long		last_meal_time;
-	t_fork		*first_fork;
-	t_fork		*second_fork;
-	pthread_t	thread_id;
-	pthread_mutex_t philo_mutex; // useful for race cond with the monitor thread
-	t_data		*data;
+	int				philo_id;
+	long			eat_count;
+	bool			full;
+	long			last_meal_time;
+	t_fork			*first_fork;
+	t_fork			*second_fork;
+	pthread_t		thread_id;
+	pthread_mutex_t	philo_mutex; // useful for race cond with the monitor thread
+	t_data			*data;
 }				t_philo;
 
 // ./philo 5 800 200 200
@@ -111,7 +124,28 @@ struct s_data
 
 // *** Prototypes ***
 
-// *** parsing ***
-void 
+void	safe_thread_handle(pthread_t *thread, void *(*foo)(void *),
+			void *data, t_opcode opcode);
+void	safe_mutex_handle(pthread_mutex_t *mutex, t_opcode opcode);
+void	*safe_malloc(size_t bytes);
+void	parse_input(t_data *data, char **argv);
+void	init_data(t_data *data);
+void    start_routine(t_data *data);
+void	set_bool(pthread_mutex_t *mutex, bool *dest, bool value);
+bool	get_bool(pthread_mutex_t *mutex, bool *value);
+long	get_long(pthread_mutex_t *mutex, long *value);
+void	set_long(pthread_mutex_t *mutex, long *dest, long value);
+bool	simulation_finished(t_data *data);
+long    gettime(t_time_code time_code);
+void	precise_usleep(long usec, t_data *data);
+void	ft_clean(t_data *data);
+void	error_exit(const char *error);
+void	write_status(t_philo_status status, t_philo *philo, bool debug);
+void	wait_all_threads(t_table *table);
+void	increase_long(t_mtx *mutex, long *value);
+bool	all_threads_running(t_mtx *mutex, long *threads, long philo_nbr);
+void    thinking(t_philo *philo, bool pre_simulation); // TO-DO
+void    de_synchronize_philos(t_philo *philo); // TO-DO
+void	*monitor(void *edata);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 15:57:58 by damendez          #+#    #+#             */
-/*   Updated: 2023/11/22 17:15:47 by damendez         ###   ########.fr       */
+/*   Updated: 2023/12/04 14:25:55 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,6 @@ int main(int argc, char **argv)
 		ft_clean(&data);
 	}
 	else
-		error_exit(ERR_IN_1);
+		error_exit("Wrong input");
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 17:20:57 by damendez          #+#    #+#             */
-/*   Updated: 2023/11/30 16:17:27 by damendez         ###   ########.fr       */
+/*   Updated: 2023/12/04 15:03:39 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void    *safe_malloc(size_t bytes)
 
     ret = malloc(bytes);
     if (ret == NULL)
-        error_exit(ALLOC_ERR);
+        error_exit("Error with the malloc");
     return (ret);
 }
 
@@ -36,7 +36,7 @@ static void handle_mutex_error(int status, t_opcode opcode)
 {
     if (status == 0)
         return ;
-    if (status == EINVAL && (opcode == LOCK || opcode == UNLOCK || opcode == DESTORY))
+    if (status == EINVAL && (opcode == LOCK || opcode == UNLOCK || opcode == DESTROY))
         error_exit("The value specified by mutex is invalid.");
     else if (status == EINVAL && opcode == INIT)
         error_exit("The value specified by attr is invalid.");
@@ -47,7 +47,7 @@ static void handle_mutex_error(int status, t_opcode opcode)
 	else if (status == ENOMEM)
 		error_exit("Insufficient memory exists to initialize the mutex.");
 	else if (status == EBUSY)
-		error_exit("Mutex is locked.")
+		error_exit("Mutex is locked.");
 }
 
 static void handle_thread_error(int status, t_opcode opcode)
@@ -65,8 +65,8 @@ static void handle_thread_error(int status, t_opcode opcode)
 	else if (status == ESRCH)
 		error_exit("No thread with the ID specified could be found");
 	else if (status == EDEADLK)
-		error_exit("A deadlock was detected (e.g., two threads tried to join
-              with each other); or thread specifies the calling thread.");
+		error_exit("A deadlock was detected (e.g., two threads tried to join"
+              "with each other); or thread specifies the calling thread.");
 }
 
 void    safe_mutex_handle(pthread_mutex_t *mutex, t_opcode opcode)

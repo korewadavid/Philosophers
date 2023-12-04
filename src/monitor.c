@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 16:08:23 by damendez          #+#    #+#             */
-/*   Updated: 2023/11/30 17:20:15 by damendez         ###   ########.fr       */
+/*   Updated: 2023/12/04 14:57:32 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static bool	philo_died(t_philo *philo)
 	if (get_bool(&philo->philo_mutex, &philo->full))
 		return (false);
 		
-	elapsed = gettime(MILLISECONDS) - get_long(&philo->philo_mutex, &philo->last_meal_time);
+	elapsed = gettime(MILLISECOND) - get_long(&philo->philo_mutex, &philo->last_meal_time);
 	t_to_die = philo->data->time_to_die / 1e3;
 
 	if (elapsed > t_to_die)
@@ -28,7 +28,7 @@ static bool	philo_died(t_philo *philo)
 	return (false);
 }
 
-void	*monitor(void *edata)
+void	*monitor_routine(void *edata)
 {
 	int		i;
 	t_data	*data;
@@ -43,10 +43,10 @@ void	*monitor(void *edata)
 		i = -1;
 		while (++i < data->philo_nbr && !simulation_finished(data))
 		{
-			if (philo_died(data->philo + i))
+			if (philo_died(data->philos + i))
 			{
 				set_bool(&data->data_mutex, &data->end_simulation, true);
-				write_status(DIED, data->philo + 1, DEBUG_MODE);
+				write_status(DIED, data->philos + 1, DEBUG_MODE);
 			}
 		}
 	}

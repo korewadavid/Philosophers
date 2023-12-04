@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 18:08:49 by damendez          #+#    #+#             */
-/*   Updated: 2023/11/28 18:08:49 by damendez         ###   ########.fr       */
+/*   Updated: 2023/12/04 14:39:44 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,5 +56,5 @@ long    get_long(pthread_mutex_t *mutex, long *value)
 
 bool    simulation_finished(t_data *data)
 {
-    return (get_bool(&data->data_mutex, &data->end_simulation))
+    return (get_bool(&data->data_mutex, &data->end_simulation));
 }

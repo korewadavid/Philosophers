@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 16:00:36 by damendez          #+#    #+#             */
-/*   Updated: 2023/11/30 17:13:41 by damendez         ###   ########.fr       */
+/*   Updated: 2023/12/04 15:20:16 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 #include <errno.h> // safe functions
 
 # ifndef DEBUG_MODE
-#	define DEBUG_MODE 0
+#	define DEBUG_MODE 1
 # endif
 
 # ifndef PHILO_MAX
@@ -51,7 +51,7 @@ typedef enum e_opcode
 	LOCK,
 	UNLOCK,
 	INIT,
-	DESTORY,
+	DESTROY,
 	CREATE,
 	JOIN,
 	DETACH,
@@ -86,7 +86,7 @@ typedef struct s_data	t_data;
 typedef struct s_fork
 {
 	pthread_mutex_t	fork;
-	int				fork_id
+	int				fork_id;
 }				t_fork;
 
 typedef struct s_philo
@@ -104,7 +104,7 @@ typedef struct s_philo
 
 // ./philo 5 800 200 200
 
-struct s_data
+typedef struct s_data
 {
 	long			philo_nbr;
 	long			time_to_die;
@@ -141,11 +141,11 @@ void	precise_usleep(long usec, t_data *data);
 void	ft_clean(t_data *data);
 void	error_exit(const char *error);
 void	write_status(t_philo_status status, t_philo *philo, bool debug);
-void	wait_all_threads(t_table *table);
-void	increase_long(t_mtx *mutex, long *value);
-bool	all_threads_running(t_mtx *mutex, long *threads, long philo_nbr);
-void    thinking(t_philo *philo, bool pre_simulation); // TO-DO
-void    de_synchronize_philos(t_philo *philo); // TO-DO
-void	*monitor(void *edata);
+void	wait_all_threads(t_data *data);
+void	increase_long(pthread_mutex_t *mutex, long *value);
+bool	all_threads_running(pthread_mutex_t *mutex, long *threads, long philo_nbr);
+void    thinking(t_philo *philo, bool pre_simulation);
+void    de_synchronize_philos(t_philo *philo);
+void	*monitor_routine(void *edata);
 
 #endif

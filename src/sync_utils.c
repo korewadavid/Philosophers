@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 21:30:02 by damendez          #+#    #+#             */
-/*   Updated: 2023/11/30 17:19:05 by damendez         ###   ########.fr       */
+/*   Updated: 2023/12/04 13:39:45 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,14 @@ void	increase_long(pthread_mutex_t *mutex, long *value)
 */
 void	de_synchronize_philos(t_philo *philo)
 {
-	
+	if (philo->data->philo_nbr % 2 == 0)
+	{
+		if (philo->philo_id % 2 == 0)
+			precise_usleep(3e4, philo->data);
+	}
+	else
+	{
+		if (philo->philo_id % 2 == 0)
+			thinking(philo, true);
+	}	
 }

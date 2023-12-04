@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 16:03:05 by damendez          #+#    #+#             */
-/*   Updated: 2023/11/27 16:00:42 by damendez         ###   ########.fr       */
+/*   Updated: 2023/12/04 15:12:56 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,14 @@ static const char	*valid_input(const char *str)
 	if (*str == '+')
 		++str;
 	else if (*str == '-')
-		error_exit(ERR_IN_1);
+		error_exit("Program only takes positive values");
 	if (!is_digit(*str))
-		error_exit(ERR_IN_1);
+		error_exit("Input is not a correct digit");
 	number = str;
 	while (is_digit(*str++))
 		++len;
 	if (len > 10)
-		error_exit(ERR_IN_2);
+		error_exit("Input value is too big, the limit is INT_MAX");
 	return (number);
 }
 
@@ -63,7 +63,7 @@ static long	ft_atol(const char *str)
 	while (is_digit(*str))
 		num = (num * 10) + (*str++ - '0');
 	if (num > INT_MAX)
-		error_exit(ERR_IN_2);
+		error_exit("Input value is too big, the limit is INT_MAX (ft_atol)");
 	return (num); 
 }
 
@@ -81,8 +81,8 @@ void	parse_input(t_data *data, char **argv)
 	data->philo_nbr = ft_atol(argv[1]);
 	if (data->philo_nbr > PHILO_MAX)
 	{
-		printf("Max philo_nbr is %d\n, 
-		make fclean and re-make with PHILO_MAX=nbr to change it\n",
+		printf("Max philo_nbr is %d\n," 
+		"make fclean and re-make with PHILO_MAX=nbr to change it\n",
 			PHILO_MAX);
 		exit(EXIT_FAILURE);
 	}

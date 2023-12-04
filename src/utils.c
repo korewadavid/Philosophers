@@ -6,11 +6,11 @@
 /*   By: damendez <damendez@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/01 16:21:15 by damendez          #+#    #+#             */
-/*   Updated: 2023/11/30 16:36:40 by damendez         ###   ########.fr       */
+/*   Updated: 2023/12/04 15:18:24 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "src/philo.h"
+#include "philo.h"
 
 /*
  * gettimeofday
@@ -61,7 +61,6 @@ void    precise_usleep(long usec, t_data *data)
             while (gettime(MICROSECOND) - start < usec)
                 ;
         }
-
     }
 }
 

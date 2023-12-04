@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 16:00:36 by damendez          #+#    #+#             */
-/*   Updated: 2023/12/04 15:20:16 by damendez         ###   ########.fr       */
+/*   Updated: 2023/12/04 16:13:18 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 #include <errno.h> // safe functions
 
 # ifndef DEBUG_MODE
-#	define DEBUG_MODE 1
+#	define DEBUG_MODE 0
 # endif
 
 # ifndef PHILO_MAX

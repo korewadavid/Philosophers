@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 16:08:21 by damendez          #+#    #+#             */
-/*   Updated: 2023/12/04 15:19:54 by damendez         ###   ########.fr       */
+/*   Updated: 2023/12/04 16:08:56 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void    write_status(t_philo_status status, t_philo *philo, bool debug)
 {
     long    elapsed;
 
-    elapsed = gettime(MICROSECOND) - philo->data->start_time;
+    elapsed = gettime(MILLISECOND) - philo->data->start_time;
     if (get_bool(&philo->philo_mutex, &philo->full))
         return ;
     safe_mutex_handle(&philo->data->write_mutex, LOCK);

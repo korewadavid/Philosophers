@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 16:00:36 by damendez          #+#    #+#             */
-/*   Updated: 2023/12/04 16:13:18 by damendez         ###   ########.fr       */
+/*   Updated: 2023/12/05 20:20:06 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ long	get_long(pthread_mutex_t *mutex, long *value);
 void	set_long(pthread_mutex_t *mutex, long *dest, long value);
 bool	simulation_finished(t_data *data);
 long    gettime(t_time_code time_code);
-void	precise_usleep(long usec, t_data *data);
+void	precise_usleep(long usec);
 void	ft_clean(t_data *data);
 void	error_exit(const char *error);
 void	write_status(t_philo_status status, t_philo *philo, bool debug);

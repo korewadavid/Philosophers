@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 16:28:22 by damendez          #+#    #+#             */
-/*   Updated: 2023/12/04 16:13:07 by damendez         ###   ########.fr       */
+/*   Updated: 2023/12/05 20:16:34 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,17 @@ void thinking(t_philo *philo, bool pre_simulation)
 	t_think = (t_eat * 2) - t_sleep;
 	if (t_think < 0)
 		t_think = 0;
-	precise_usleep(t_think * 0.42, philo->data);
+	precise_usleep(t_think * 0.42);
 	
+}
+
+static void	sleep_think(t_philo *philo)
+{
+	if (simulation_finished(philo->data))
+		return ;
+	write_status(SLEEPING, philo, DEBUG_MODE);
+	precise_usleep(philo->data->time_to_sleep);
+	write_status(THINKING, philo, DEBUG_MODE);
 }
 
 /*
@@ -51,7 +60,7 @@ void    *lone_philo(void *arg)
     increase_long(&philo->data->data_mutex, &philo->data->threads_running_nbr);
     write_status(TAKE_FIRST_FORK, philo, DEBUG_MODE);
     while (!simulation_finished(philo->data))
-        precise_usleep(200, philo->data);
+        precise_usleep(200);
     return (NULL);
 }
 
@@ -75,7 +84,7 @@ static void eat(t_philo *philo)
     set_long(&philo->philo_mutex, &philo->last_meal_time, gettime(MILLISECOND));
     increase_long(&philo->philo_mutex, &philo->eat_count); // DIFERENT FROM ANSWER
     write_status(EATING, philo, DEBUG_MODE);
-    precise_usleep(philo->data->time_to_eat, philo->data);
+    precise_usleep(philo->data->time_to_eat);
     if (philo->data->nbr_max_meals > 0 
         && philo->eat_count == philo->data->nbr_max_meals)
         set_bool(&philo->philo_mutex, &philo->full, true);
@@ -88,6 +97,8 @@ static void eat(t_philo *philo)
 /*
  * 0) wait all philos, synchro start
  * 1) endless loop philo
+ *
+ *
 */
 void    *routine_simulation(void *data)
 {
@@ -99,19 +110,24 @@ void    *routine_simulation(void *data)
     set_long(&philo->philo_mutex, &philo->last_meal_time, gettime(MILLISECOND));
     increase_long(&philo->data->data_mutex, 
             &philo->data->threads_running_nbr);
-    de_synchronize_philos(philo);
+    if (philo->philo_id % 2 == 0)
+		precise_usleep(philo->data->time_to_eat / 2);
+	else if (philo->data->philo_nbr % 2 != 0
+		&& philo->philo_id == philo->data->philo_nbr)
+		precise_usleep(philo->data->time_to_eat + 10);
     while (!simulation_finished(philo->data))
     {
         // 1) Check if philo is full
-        if (get_bool(&philo->philo_mutex, &philo->full))
-            break ;
+        //if (get_bool(&philo->philo_mutex, &philo->full))
+           // break ;
         // 2) eat
         eat(philo);
         // 3) sleep
-		write_status(SLEEPING, philo, DEBUG_MODE);
-        precise_usleep(philo->data->time_to_sleep, philo->data);
+		//write_status(SLEEPING, philo, DEBUG_MODE);
+        //precise_usleep(philo->data->time_to_sleep, philo->data);
         // 4) think
-        thinking(philo, false);
+        //thinking(philo, false);
+		sleep_think(philo);
     }
     return (NULL);
 }
@@ -124,6 +140,11 @@ void    *routine_simulation(void *data)
  * 2) Create a monitor thread -> checks when philos died
  * 3) Synchronize simulation start -> all philos start at the same time
  * 4) Join the philos to main when done (?)
+ *
+ * ft_launch
+ * 0) Allocates space for a string of philosopher data types for each philosopher thread
+ * 1) For each philosopher, a thread is started invoking 'actions'
+ * 2) 
 */
 void    start_routine(t_data *data)
 {

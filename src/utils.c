@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/01 16:21:15 by damendez          #+#    #+#             */
-/*   Updated: 2023/12/04 15:18:24 by damendez         ###   ########.fr       */
+/*   Updated: 2023/12/05 20:19:50 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,26 +41,16 @@ long    gettime(t_time_code time_code)
  * 1) usleep the majority of the time
  * 2) last microseconds will be waited with spinlock
 */
-void    precise_usleep(long usec, t_data *data)
+void    precise_usleep(long usec)
 {
     long start;
-    long elapsed;
-    long remaining;
+    //long elapsed;
+    //long remaining;
 
     start = gettime(MICROSECOND);
-    while (gettime(MICROSECOND) - start < usec)
+    while ((gettime(MICROSECOND) - start) < usec)
     {
-        if (simulation_finished(data))
-            break ;
-        elapsed = gettime(MICROSECOND) - start;
-        remaining = usec - elapsed;
-        if (remaining > 1e3)
-            usleep(remaining / 2);
-        else
-        {
-            while (gettime(MICROSECOND) - start < usec)
-                ;
-        }
+		usleep(usec / 2);
     }
 }
 

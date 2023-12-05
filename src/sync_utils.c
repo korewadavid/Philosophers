@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 21:30:02 by damendez          #+#    #+#             */
-/*   Updated: 2023/12/04 13:39:45 by damendez         ###   ########.fr       */
+/*   Updated: 2023/12/05 20:18:48 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	de_synchronize_philos(t_philo *philo)
 	if (philo->data->philo_nbr % 2 == 0)
 	{
 		if (philo->philo_id % 2 == 0)
-			precise_usleep(3e4, philo->data);
+			precise_usleep(3e4);
 	}
 	else
 	{

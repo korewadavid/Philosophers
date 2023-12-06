@@ -92,33 +92,32 @@ typedef struct s_fork
 typedef struct s_philo
 {
 	int				philo_id;
-	long			eat_count;
-	bool			full;
+	int				r_fork;
+	int				l_fork;
+	int				eat_count;
+	int				eating;
 	long			last_meal_time;
-	t_fork			*first_fork;
-	t_fork			*second_fork;
-	pthread_t		thread_id;
+	//t_fork			*first_fork;
+	//t_fork			*second_fork;
 	pthread_mutex_t	philo_mutex; // useful for race cond with the monitor thread
 	t_data			*data;
 }				t_philo;
 
-// ./philo 5 800 200 200
-
 typedef struct s_data
 {
-	long			philo_nbr;
+	int				philo_nbr;
+	int				nbr_max_meals;
 	long			time_to_die;
 	long			time_to_eat;
 	long			time_to_sleep;
-	long			nbr_max_meals;
 	long			start_time;
 	bool			end_simulation; // if a philo dies or philos are full
-	bool			all_threads_ready; // for synchronizing th start of the philos
-	long			threads_running_nbr;
-	pthread_t		monitor;
+	//bool			all_threads_ready; // for synchronizing th start of the philos
+	//long			threads_running_nbr;
+	//pthread_t		monitor;
 	pthread_mutex_t data_mutex; // avoid race conditions when reading from data
 	pthread_mutex_t write_mutex;
-	t_fork			*forks;
+	pthread_mutex_t	*forks;
 	t_philo			*philos;
 }				t_data;
 

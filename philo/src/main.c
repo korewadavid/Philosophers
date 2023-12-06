@@ -10,20 +10,34 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../inc/philo.h"
+
+static void	free_all(t_data *data)
+{
+	int	i;
+
+	i = -1;
+	while (++i < data->philo_nbr)
+		safe_mutex_handle(&data->philos[i].philo_mutex, DESTROY);
+	free(data->philos);
+	i = -1;
+	while (++i < data->philo_nbr)
+		safe_mutex_handle(&data->forks[i], DESTROY);
+	free(data->forks);
+	safe_mutex_handle(&data->data_mutex, DESTROY);
+	safe_mutex_handle(&data->write_mutex, DESTROY);
+}
 
 int main(int argc, char **argv)
 {
 	t_data data;
-	
-	if (argc == 5 || argc == 6)
-	{
-		parse_input(&data, argv);
-		init_data(&data);
-		start_routine(&data);
-		ft_clean(&data);
-	}
-	else
-		error_exit("Wrong input");
+
+	if (check_input(argc, argv))
+		return (1);
+	if (init_program(argc, argv))// TO-DO
+		return (1);
+	if (start_program(argc, argv))// TO-DO
+		return (1);
+	free_all(&data);
 	return (0);
 }

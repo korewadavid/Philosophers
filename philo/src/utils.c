@@ -12,6 +12,11 @@
 
 #include "philo.h"
 
+bool	is_digit(char c)
+{
+	return (c >= 48 && c <= 57);
+}
+
 /*
  * gettimeofday
  * time_code -> philo.h enum
@@ -54,25 +59,25 @@ void    precise_usleep(long usec)
     }
 }
 
-void    ft_clean(t_data *data)
-{
-    t_philo *philo;
-    int     i;
+// void    ft_clean(t_data *data)
+// {
+//     t_philo *philo;
+//     int     i;
 
-    i = -1;
-    while (++i < data->philo_nbr)
-    {
-        philo = data->philos + 1;
-        safe_mutex_handle(&philo->philo_mutex, DESTROY);
-    }
-    safe_mutex_handle(&data->write_mutex, DESTROY);
-    safe_mutex_handle(&data->data_mutex, DESTROY);
-    free(data->forks);
-    free(data->philos);
-}
+//     i = -1;
+//     while (++i < data->philo_nbr)
+//     {
+//         philo = data->philos + 1;
+//         safe_mutex_handle(&philo->philo_mutex, DESTROY);
+//     }
+//     safe_mutex_handle(&data->write_mutex, DESTROY);
+//     safe_mutex_handle(&data->data_mutex, DESTROY);
+//     free(data->forks);
+//     free(data->philos);
+// }
 
 void    error_exit(const char *error)
 {
     printf("%s\n", error);
-    exit(EXIT_FAILURE);
+    return (1);
 }

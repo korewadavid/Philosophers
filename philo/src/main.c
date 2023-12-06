@@ -34,7 +34,7 @@ int main(int argc, char **argv)
 
 	if (check_input(argc, argv))
 		return (1);
-	if (init_program(argc, argv))// TO-DO
+	if (init_program(&data, argv))
 		return (1);
 	if (start_program(argc, argv))// TO-DO
 		return (1);

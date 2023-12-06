@@ -10,30 +10,30 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../inc/philo.h"
 
 // TO-DO (time to think we can model, other times are fixed from input)
 /*
  * 
 */
-void thinking(t_philo *philo, bool pre_simulation)
-{
-	long	t_eat;
-	long	t_sleep;
-	long	t_think;
+// void thinking(t_philo *philo, bool pre_simulation)
+// {
+// 	long	t_eat;
+// 	long	t_sleep;
+// 	long	t_think;
 
-	if (!pre_simulation)
-		write_status(THINKING, philo, DEBUG_MODE);
-	if (philo->data->philo_nbr % 2 == 0)
-		return ;
-	t_eat = philo->data->time_to_eat;
-	t_sleep = philo->data->time_to_sleep;
-	t_think = (t_eat * 2) - t_sleep;
-	if (t_think < 0)
-		t_think = 0;
-	precise_usleep(t_think * 0.42);
+// 	if (!pre_simulation)
+// 		write_status(THINKING, philo, DEBUG_MODE);
+// 	if (philo->data->philo_nbr % 2 == 0)
+// 		return ;
+// 	t_eat = philo->data->time_to_eat;
+// 	t_sleep = philo->data->time_to_sleep;
+// 	t_think = (t_eat * 2) - t_sleep;
+// 	if (t_think < 0)
+// 		t_think = 0;
+// 	precise_usleep(t_think * 0.42);
 	
-}
+// }
 
 static void	sleep_think(t_philo *philo)
 {
@@ -59,8 +59,9 @@ void    *lone_philo(void *arg)
     set_long(&philo->philo_mutex, &philo->last_meal_time, gettime(MILLISECOND));
     increase_long(&philo->data->data_mutex, &philo->data->threads_running_nbr);
     write_status(TAKE_FIRST_FORK, philo, DEBUG_MODE);
-    while (!simulation_finished(philo->data))
-        precise_usleep(200);
+    // while (!simulation_finished(philo->data))
+    //     precise_usleep(200);
+    precise_usleep(philo->data->time_to_die);
     return (NULL);
 }
 
@@ -74,17 +75,20 @@ void    *lone_philo(void *arg)
 */
 static void eat(t_philo *philo)
 {
-    // 1)
-    safe_mutex_handle(&philo->first_fork->fork, LOCK);
+    if (simulation_finished(philo->data))
+		return ;
+    safe_mutex_handle(&philo->data->forks[philo->l_fork], LOCK);
     write_status(TAKE_FIRST_FORK, philo, DEBUG_MODE);
-    safe_mutex_handle(&philo->second_fork->fork, LOCK);
+    safe_mutex_handle(&philo->data->forks[philo->r_fork], LOCK);
     write_status(TAKE_SECOND_FORK, philo, DEBUG_MODE);
 
     // 2)
     set_long(&philo->philo_mutex, &philo->last_meal_time, gettime(MILLISECOND));
     increase_long(&philo->philo_mutex, &philo->eat_count); // DIFERENT FROM ANSWER
+    set_bool(&philo->philo_mutex, &philo->eating, true);
     write_status(EATING, philo, DEBUG_MODE);
     precise_usleep(philo->data->time_to_eat);
+    set_bool(&philo->philo_mutex, &philo->eating, false);
     if (philo->data->nbr_max_meals > 0 
         && philo->eat_count == philo->data->nbr_max_meals)
         set_bool(&philo->philo_mutex, &philo->full, true);
@@ -146,26 +150,31 @@ void    *routine_simulation(void *data)
  * 1) For each philosopher, a thread is started invoking 'actions'
  * 2) 
 */
-void    start_routine(t_data *data)
+int    start_routines(t_data *data)
 {
-    int i;
+    pthread_t   monitor;
+    int         i;
+    pthread_t   *philo_th;
 
     i = -1;
+    philo_th = (pthread_t *)malloc(sizeof(pthread_t) * data->philo_nbr);
     if (data->nbr_max_meals == 0)
-        return ;
+        error_exit("Invalid number_of_times_each_philosopher_must_eat\n");
     else if (data->philo_nbr == 1)
-        safe_thread_handle(&data->philos[0].thread_id, lone_philo, &data->philos[0], CREATE);
+        safe_thread_handle(&philo_th[0], lone_philo, &data->philos[0], CREATE);
     else
     {
         while (++i < data->philo_nbr)
-            safe_thread_handle(&data->philos[i].thread_id, routine_simulation, &data->philos[i], CREATE);
+            safe_thread_handle(&philo_th[i], routine_simulation, &data->philos[i], CREATE);
     }
-    safe_thread_handle(&data->monitor, monitor_routine, data, CREATE);
+    safe_thread_handle(&monitor, monitor_routine, data, CREATE);
     data->start_time = gettime(MILLISECOND);
     set_bool(&data->data_mutex, &data->all_threads_ready, true); 
     i = -1;
     while (++i < data->philo_nbr)
-        safe_thread_handle(&data->philos[i].thread_id, NULL, NULL, JOIN);
+        safe_thread_handle(&data->philo_th[i], NULL, NULL, JOIN);
     set_bool(&data->data_mutex, &data->end_simulation, true);
     safe_thread_handle(&data->monitor, NULL, NULL, JOIN);
+    free(philo_th);
+    return (0);
 }

@@ -95,7 +95,7 @@ typedef struct s_philo
 	int				r_fork;
 	int				l_fork;
 	int				eat_count;
-	int				eating;
+	bool			eating;
 	long			last_meal_time;
 	//t_fork			*first_fork;
 	//t_fork			*second_fork;

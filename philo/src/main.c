@@ -36,7 +36,7 @@ int main(int argc, char **argv)
 		return (1);
 	if (init_program(&data, argv))
 		return (1);
-	if (start_program(argc, argv))// TO-DO
+	if (start_routines(argc, argv))// TO-DO
 		return (1);
 	free_all(&data);
 	return (0);

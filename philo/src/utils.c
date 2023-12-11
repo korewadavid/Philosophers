@@ -10,74 +10,51 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../inc/philo.h"
 
-bool	is_digit(char c)
+bool	ft_isdigit(int c)
 {
 	return (c >= 48 && c <= 57);
 }
 
-/*
- * gettimeofday
- * time_code -> philo.h enum
-*/
-long    gettime(t_time_code time_code)
-{
-    struct timeval  tv;
-
-    if (gettimeofday(&tv, NULL))
-        error_exit("Gettimeofday failed");
-    if (time_code == SECOND)
-        return (tv.tv_sec + (tv.tv_usec / 1e6));
-    else if (time_code == MILLISECOND)
-        return ((tv.tv_sec * 1e3) + (tv.tv_usec / 1e3));
-    else if (time_code == MICROSECOND)
-        return ((tv.tv_sec * 1e6) + tv.tv_usec);
-    else
-        error_exit("Wrong input to gettime().");
-    return (1);
-}
-
-/*
- * precise usleep, og one is inaccurate (can sleep more time then expected).
- * 
- * is the simulation finished?
- * 
- * 1) usleep the majority of the time
- * 2) last microseconds will be waited with spinlock
-*/
-void    precise_usleep(long usec)
-{
-    long start;
-    //long elapsed;
-    //long remaining;
-
-    start = gettime(MICROSECOND);
-    while ((gettime(MICROSECOND) - start) < usec)
-    {
-		usleep(usec / 2);
-    }
-}
-
-// void    ft_clean(t_data *data)
-// {
-//     t_philo *philo;
-//     int     i;
-
-//     i = -1;
-//     while (++i < data->philo_nbr)
-//     {
-//         philo = data->philos + 1;
-//         safe_mutex_handle(&philo->philo_mutex, DESTROY);
-//     }
-//     safe_mutex_handle(&data->write_mutex, DESTROY);
-//     safe_mutex_handle(&data->data_mutex, DESTROY);
-//     free(data->forks);
-//     free(data->philos);
-// }
-
-void    error_exit(const char *error)
+int error_exit(const char *error)
 {
     printf("%s\n", error);
     return (1);
+}
+
+/*
+ * 1) Skip leading whitespaces in the input string.
+ * 2) Check for number sign and update variable
+ * 3) Handle the case where the input string is empty after removing whitespaces.
+ * 4) Iterate through the string while the characters are digits.
+ * updating ret adding current char as an int
+*/
+long int    ft_atol(char *str)
+{
+    long int    res;
+    long int    sign;
+    long int    i;
+
+    res = 0;
+    sign = 1;
+    i = 0;
+
+	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\v'
+		|| str[i] == '\f' || str[i] == '\r' || str[i] == '\n')
+		i++;
+    if (str[i] == '-' || str[i] == '+')
+    {
+        if (str[i] == '-')
+            sign = -1;
+        i++;
+    }
+    if (str[i] == '\0')
+        return (0);
+	while (ft_isdigit((int)str[i]))
+	{
+		res = res * 10 + str[i] - '0';
+		i++;
+	}
+	return (sign * res);
 }

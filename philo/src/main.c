@@ -12,34 +12,48 @@
 
 #include "../inc/philo.h"
 
-static int	case_one_philo(t_philo *philo)
+static void	*case_one_philo(void *arg)
 {
-	pthread_t	philo_th;
+	t_philo *philo;
 
-	data->start_time = get_time();
-	safe_thread_handle(&philo_th, &routine, &data->philo[0], CREATE);
-	pthread_detach(&philo_th);
-	ft_usleep(philo->data->time_to_die);
-	ft_print_died(philo->data->philo, "died");
-	return (0);
+	philo = (t_philo *)arg;
+	ft_print(philo, "has taken a fork");
+	while (1)
+	{
+		if (philo->data->finish == true)
+			return (NULL);
+	}
+	return (NULL);
 }
 
+/*
+ * 1) Safe allocate memory for array of thread identifiers for philo threads
+ * 2) If only 1 philo, create philo thread invoking case_one_philo()
+ * 2.1) If philos > 1, create threads invoking philo_routine()
+ * 3) Create monitor thread that constantly checks if a philo has 
+ * died or if they have all finished eating, either one will finish the program
+ * 4) wait for threads to terminate, on success free thread id array
+*/
 static int	start_routines(t_data *data)
 {
+	pthread_t	*philos_th;
 	pthread_t	monitor;
 	int			i;
-	pthread_t	*philo_th;
- 
+
 	i = -1;
-	philo_th = safe_malloc(sizeof(pthread_t) * data->philo_nbr);
-	while (++i < data->philo_nbr)
-		safe_thread_handle(&philo_th[i], &routine, &data->philo[i], CREATE);
-	safe_thread_handle(&monitor, &monitor_routine, data, CREATE);
+	philos_th = safe_malloc(sizeof(pthread_t) * data->philo_nb);
+	if (data->philo_nb == 1)
+		safe_thread_handle(&philos_th[0], case_one_philo, &data->philos[0], CREATE);
+	else
+	{
+		while (++i < data->philo_nb)
+			safe_thread_handle(&philos_th[i], philo_routine, &data->philos[i], CREATE);// TO-DO
+	}
+	safe_thread_handle(&monitor, monitor_routine, &data, CREATE);// TO-DO
 	i = -1;
-	while (++i < data->philo_nbr)
-		safe_thread_handle(&philo_th[i], NULL, NULL, JOIN);
-	safe_thread_handle(&monitor, NULL, NULL, JOIN);
-	free(philo_th);
+	while (++i < data->philo_nb)
+		safe_thread_handle(&philos_th[i], NULL, NULL, JOIN);
+	free(philos_th);
 	return (0);
 }
 
@@ -65,12 +79,10 @@ int main(int argc, char **argv)
 
 	if (check_input(argc, argv))
 		return (1);
-	if (init_program(&data, argv))
+	if (init_all(&data, argv))
 		return (1);
-	if (data.philo_nbr == 1)
-		return (case_one_philo(data.philo))
 	if (start_routines(argc, argv))// TO-DO
 		return (1);
-	free_all(&data);
+	free_all(&data); // TO-DO
 	return (0);
 }

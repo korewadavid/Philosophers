@@ -10,55 +10,32 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-// edc
 #include "../inc/philo.h"
 
-static inline bool	is_digit(char c)
+static int	check_argc(int argc)
 {
-	return (c >= 48 && c <= 57);
+	if (argc != 5 || argc != 6)
+		error_exit("Invalid number of imput arguments. ej: ./philo 5 800 200 200 [7]");
+	return (0);
 }
 
-long int	ft_atol(char *str)
-{
-	long int	res;
-	long int	sign;
-	long int	i;
-
-	res = 0;
-	sign = 1;
-	i = 0;
-	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\v'
-		|| str[i] == '\f' || str[i] == '\r' || str[i] == '\n')
-		i++;
-	if (str[i] == '-' || str[i] == '+')
-	{
-		if (str[i] == '-')
-			sign = -1;
-		i++;
-	}
-	if (str[i] == '\0')
-		return (0);
-	while (isdigit(str[i]))
-	{
-		res = res * 10 + str[i] - '0';
-		i++;
-	}
-	return (sign * res);
-}
-
-static int	check_if_digits(int argc, char **argv)
+/*
+ * 1) For each input argument string after first one, check if the characters are digits
+ * 1.1) If user gave 'meals_nb' check that its greater than 0
+*/
+static int	check_format(int argc, char **argv)
 {
 	int	i;
-	int	j;
+	int j;
 
-	i = 1;
+	i = 0;
 	j = 0;
-	while (i < argc)
+	while (++i < argc)
 	{
 		while (argv[i][j])
 		{
-			if (!is_digit(argv[i][j]) || (argc == 6 && ft_atol(argv[5]) <= 0))
-                error_exit("All values after ./philo must be integers > 0\n");
+			if (!ft_isdigit(int)argv[i][j])
+				error_exit("All values after ./philo must be integers > 0\n");
 			else
 				j++;
 		}
@@ -68,31 +45,37 @@ static int	check_if_digits(int argc, char **argv)
 	return (0);
 }
 
-static int	least_60(char **argv)
+/*
+ * starting from time_to_die until last time value, 
+ * check if string value (ft_atol) is less than 60ms
+*/
+static int	check_time_values(char **argv)
 {
 	long	i;
 
-	i = 2;
-	while (i < 5)
+	i = 1;
+	while (++i < 5)
 	{
 		if (ft_atol(argv[i]) < 60)
-            error_exit("All times must be >= 60\n");
-		else
-			i++;
+			error_exit("All times must be >= 60\n");
 	}
 	return (0);
 }
 
+/*
+ * 1) Check number of input arguments
+ * 2) Check if format of input is correct (only digits)
+ * 		ej: ./philo 5 800 200 200 [7]
+ * 3) Check input values to see if their correct (timestamps and philo_nb)
+*/
 int check_input(int argc, char **argv)
 {
-    long n;
+	long n;
 
-    if (argc < 5 || argc > 6)
-        error_exit("Input should be: ./philo + 4 or 5 args\n")
-	if (check_if_digits(argc, argv) || least_60(argv))
+	if (check_argc(argc) || check_format(argc, argv) || check_time_values(argv))
 		return (1);
-	n = ft_atol(av[1]);
+	n = ft_atol(argv[1]);
 	if (n < 1 || n > 200)
-        error_exit("Number of philosophers should be 1-200\n");
+		error_exit("number_of_philosophers should be between 1 and 200");
 	return (0);
 }

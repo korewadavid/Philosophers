@@ -12,14 +12,11 @@
 
 /*
  * Changes
- *
- * 1) Implementation of safe functions
- * 2) One_philo case must be a thread (pthread_detach case)
- * 3) free_all doesnt seem to free philo mutexs, might need to be corrected
- * TO-DO 4) Return 1 on error, 0 on success
- * TO-DO 5) use of geters and seters ?
- * TO-DO 6) t_philo eatingflag change to bool
- * TO-DO 7) is_digit changed to bool
+ * 1) Change 'eating' fflag to bool TO-DO
+ * 2) Return (1) on error, 0 on success
+ * 3) Make one_philo case creating a thread for the philo
+ * 3.1) Instead of being called from main, it will be done from 'start'routines'
+ * 
 */
 #ifndef PHILO_H
 # define PHILO_H
@@ -53,56 +50,56 @@ typedef struct s_data	t_data;
 
 typedef struct s_philo
 {
-	int				id;
-	int				r_fork;
-	int				l_fork;
-	int				eat_count;
-	bool			eating;
-	unsigned long	last_meal_time;
-	pthread_mutex_t	eating_mutex;
-	t_data			*data;
-}				t_philo;
+	int					id;
+	int					l_fork;
+	int					r_fork;
+	int					meals_done;
+	bool				eating;// (Changed to bool)
+	unsigned long		last_meal_t;
+	pthread_mutex_t		m_eating;
+	t_data				*data;
+}			t_philo;
 
 typedef struct s_data
 {
-	int				philo_nbr;
-	int				nbr_max_meals;
-	unsigned long	time_to_die;
-	unsigned long	time_to_eat;
-	unsigned long	time_to_sleep;
-	unsigned long	start_time;
-	bool			end_simulation; // if a philo dies or philos are full
-	pthread_mutex_t print_mutex; // avoid race conditions when reading from data
-	pthread_mutex_t finish_mutex;
-	pthread_mutex_t	*forks;
-	t_philo			*philo;
-}				t_data;
+	int				philo_nb;
+	int				meals_nb;
+	unsigned long	die_t;
+	unsigned long	eat_t;
+	unsigned long	sleep_t;
+	unsigned long	start_t;
+	bool			finish;
+	pthread_mutex_t	m_finish;
+	pthread_mutex_t	m_print;
+	pthread_mutex_t	*m_forks;
+	t_philo			*philos;
+}			t_data;
 
-// *** Prototypes ***
-
-// time.c
+/*	 	time.c		*/
 unsigned long	get_time(void);
 void			ft_usleep(unsigned long time);
 
-// input.c
-int				check_input(int argc, char **argv);
+/*		input.c		*/
+int				check_input(int ac, char **av);// DONE
 
-// utils.c
-long int		ft_atol(char *str);
-bool			ft_isdigit(int c);
+/*		utils.c		*/
+long int		ft_atol(char *str);// DONE
+bool			ft_isdigit(int c);// DONE
+int 			error_exit(const char *error);// DONE
 
-// init.c
-int				init_program(t_data *data, char **argv);
+/*		init.c		*/
+int				init_all(t_data *data, char **av);// DONE
 
-// routine.c
-void			*routine(void *arg);
+/*		routine.c	*/
+void			*philo_routine(void *arg);
 
-// write.c
+/*		print.c		*/
 void			ft_print(t_philo *philo, char *str);
 void			ft_print_died(t_philo *philo, char *str);
 
-// monitor.c
+/*		monitor.c	*/
 void			*monitor_routine(void *arg);
+
 
 // safe_functions.c
 void    safe_mutex_handle(pthread_mutex_t *mutex, t_opcode opcode);
@@ -110,29 +107,5 @@ void	safe_thread_handle(pthread_t *thread, void *(*foo)(void *),
 			void *data, t_opcode opcode);
 void	safe_mutex_handle(pthread_mutex_t *mutex, t_opcode opcode);
 void	*safe_malloc(size_t bytes);
-
-// get_set.c
-
-
-
-//void	parse_input(t_data *data, char **argv);
-//void	init_data(t_data *data);
-//void    start_routine(t_data *data);
-//void	set_bool(pthread_mutex_t *mutex, bool *dest, bool value);
-//bool	get_bool(pthread_mutex_t *mutex, bool *value);
-// long	get_long(pthread_mutex_t *mutex, long *value);
-// void	set_long(pthread_mutex_t *mutex, long *dest, long value);
-//bool	simulation_finished(t_data *data);
-// long    gettime(t_time_code time_code);
-// void	precise_usleep(long usec);
-// void	ft_clean(t_data *data);
-// void	error_exit(const char *error);
-// void	write_status(t_philo_status status, t_philo *philo, bool debug);
-// void	wait_all_threads(t_data *data);
-// void	increase_long(pthread_mutex_t *mutex, long *value);
-//bool	all_threads_running(pthread_mutex_t *mutex, long *threads, long philo_nbr);
-// void    thinking(t_philo *philo, bool pre_simulation);
-// void    de_synchronize_philos(t_philo *philo);
-// void	*monitor_routine(void *edata);
 
 #endif

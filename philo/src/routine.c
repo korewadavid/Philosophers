@@ -12,47 +12,65 @@
 
 #include "../inc/philo.h"
 
-/*
- * eat routine
- * 
- * 1) grab the forks (first and second)
- * 2) eat: write eat, update last meal time, updeat meal_counter
- *      eventually change the status of bool full
- * 3) release the forks
-*/
+static void sleep_and_think(t_philo *philo)
+{
+    if (philo->data->finish == true)
+        return ;
+    ft_print(philo, "is sleeping");
+    ft_usleep(philo->data->sleep_t);
+    ft_print(philo, "is thinking");
+}
+
 static void eat(t_philo *philo)
 {
-    if (simulation_finished(philo->data))
-		return ;
-    safe_mutex_handle(&philo->data->forks[philo->l_fork], LOCK);
-    write_status(TAKE_FIRST_FORK, philo, DEBUG_MODE);
-    safe_mutex_handle(&philo->data->forks[philo->r_fork], LOCK);
-    write_status(TAKE_SECOND_FORK, philo, DEBUG_MODE);
-
-    // 2)
-    set_long(&philo->philo_mutex, &philo->last_meal_time, gettime(MILLISECOND));
-    increase_long(&philo->philo_mutex, &philo->eat_count); // DIFERENT FROM ANSWER
-    set_bool(&philo->philo_mutex, &philo->eating, true);
-    write_status(EATING, philo, DEBUG_MODE);
-    precise_usleep(philo->data->time_to_eat);
-    set_bool(&philo->philo_mutex, &philo->eating, false);
-    if (philo->data->nbr_max_meals > 0 
-        && philo->eat_count == philo->data->nbr_max_meals)
-        set_bool(&philo->philo_mutex, &philo->full, true);
-    
-    // 3)
-    safe_mutex_handle(&philo->first_fork->fork, UNLOCK);
-    safe_mutex_handle(&philo->second_fork->fork, UNLOCK);
+    if (philo->data->finish == true)
+        return ;
+    else if (philo->data->meals_nb == -1
+        || (philo->data->meals_nb > 0 && philo->meals_done < philo->data->meals_nb))
+    {
+        if (philo->data->finish == true)
+            return ;
+        safe_mutex_handle(&philo->data->m_forks[philo->l_fork], LOCK);
+        safe_mutex_handle(&philo->data->m_forks[philo->r_fork], LOCK);
+		ft_print(philo, "has taken a fork");
+		ft_print(philo, "has taken a fork");
+        safe_mutex_handle(&philo->m_eating, LOCK);
+        philo->eating = true;
+        philo->last_meal_t = get_time();
+        ft_print(philo, "is eating");
+        ft_usleep(philo->data->eat_t);
+        philo->meals_done++;
+        philo->eating = false;
+        safe_mutex_handle(&philo->m_eating, UNLOCK);
+        safe_mutex_handle(&philo->data->m_forks[philo->l_fork], UNLOCK);
+        safe_mutex_handle(&philo->data->m_forks[philo->r_fork], UNLOCK);
+    }
 }
 
 /*
  * 1) First philo starts routine, every next one (2, 4, 6, etc.) will wait
- * 1.1) If theres and odd number of philosophers, last one must wait 2 wait cycles WHY?
+ * 1.1) If theres and odd number of philosophers, last one must wait 2 wait cycles:
+ * 2) Until the simulation must finish, philos will eat then sleep and think
+ * 2.1) eat: grab forks -> print, update eating bool and last meal time -> print
+ *      "eat" and update meals eaten then let go foks
+ * 2.2) sleep: //
 */
 void    *philo_routine(void *arg)
 {
     t_philo *philo;
 
     philo = (t_philo *)data;
-    if (philo->lll)
+    if (philo->id % 2 == 0)
+        ft_usleep(philo->data->eat_t / 2);
+    else if (philo->data->philo_nb % 2 != 0
+        && philo->id == philo->data->philo_nb)
+        ft_usleep(philo->data->eat_t + 10);
+    while (1)
+    {
+        if (philo->data->finish == true)
+            return (NULL);
+        eat(philo);
+        sleep_and_think(philo);
+    }
+    return (NULL);
 }

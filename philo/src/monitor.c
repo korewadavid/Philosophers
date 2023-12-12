@@ -14,41 +14,29 @@
 
 static bool	philo_died(t_philo *philo)
 {
-	long	elapsed;
-	long	t_to_die;
 
-	if (get_bool(&philo->philo_mutex, &philo->full))
-		return (false);
-		
-	elapsed = gettime(MILLISECOND) - get_long(&philo->philo_mutex, &philo->last_meal_time);
-	t_to_die = philo->data->time_to_die / 1e3;
-
-	if (elapsed > t_to_die)
-		return (true);
-	return (false);
 }
 
-void	*monitor_routine(void *edata)
+static bool	philos_finished(t_philo *philo)
 {
-	int		i;
+	
+}
+
+/*
+ * Constently checks if a philo qualifies as dead or if theyve all eaten meal_nb
+*/
+void	*monitor_routine(void *arg)
+{
 	t_data	*data;
 
-	data = (t_data *)edata;
-
-	while (!all_threads_running(&data->data_mutex, 
-			&data->threads_running_nbr, data->philo_nbr))
-		;
-	while (!simulation_finished(data))
+	data = (t_data *)arg;
+	if (data->philo_nb == 1)
+		return (NULL);
+	while (1)
 	{
-		i = -1;
-		while (++i < data->philo_nbr && !simulation_finished(data))
-		{
-			if (philo_died(data->philos + i))
-			{
-				set_bool(&data->data_mutex, &data->end_simulation, true);
-				write_status(DIED, data->philos + 1, DEBUG_MODE);
-			}
-		}
+		if (philo_died(data) == true)
+			return (NULL);
+		if (philos_finished(data) == true)
+			return (NULL);
 	}
-	return (NULL);
 }

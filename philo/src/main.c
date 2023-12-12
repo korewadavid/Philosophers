@@ -11,18 +11,23 @@
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
-
+/*
+ * If only 1 philo, monitor will not be used, thread just does nothing for die_t then returns null
+*/
 static void	*case_one_philo(void *arg)
 {
 	t_philo *philo;
 
 	philo = (t_philo *)arg;
+	safe_mutex_handle(&philo->data->m_forks[philo->l_fork], LOCK);
 	ft_print(philo, "has taken a fork");
-	while (1)
-	{
-		if (philo->data->finish == true)
-			return (NULL);
-	}
+	// while (1)
+	// {
+	// 	if (philo->data->finish == true)
+	// 		return (NULL);
+	// }
+	ft_usleep(philo->data->die_t);
+	safe_mutex_handle(&philo->data->m_forks[philo->l_fork], UNLOCK);
 	return (NULL);
 }
 
@@ -42,6 +47,7 @@ static int	start_routines(t_data *data)
 
 	i = -1;
 	philos_th = safe_malloc(sizeof(pthread_t) * data->philo_nb);
+	data->start_t = get_time(); // DIFFERENT
 	if (data->philo_nb == 1)
 		safe_thread_handle(&philos_th[0], case_one_philo, &data->philos[0], CREATE);
 	else

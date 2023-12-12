@@ -16,7 +16,7 @@
  * 2) Return (1) on error, 0 on success
  * 3) Make one_philo case creating a thread for the philo
  * 3.1) Instead of being called from main, it will be done from 'start'routines'
- * 
+ * 4) start_t saved in start_routines()
 */
 #ifndef PHILO_H
 # define PHILO_H
@@ -76,11 +76,11 @@ typedef struct s_data
 }			t_data;
 
 /*	 	time.c		*/
-unsigned long	get_time(void);
-void			ft_usleep(unsigned long time);
+unsigned long	get_time(void); // DONE
+void			ft_usleep(unsigned long time); // DONE
 
 /*		input.c		*/
-int				check_input(int ac, char **av);// DONE
+int				check_input(int argc, char **argv);// DONE
 
 /*		utils.c		*/
 long int		ft_atol(char *str);// DONE
@@ -88,17 +88,17 @@ bool			ft_isdigit(int c);// DONE
 int 			error_exit(const char *error);// DONE
 
 /*		init.c		*/
-int				init_all(t_data *data, char **av);// DONE
+int				init_all(t_data *data, char **argv);// DONE
 
 /*		routine.c	*/
-void			*philo_routine(void *arg);
+void			*philo_routine(void *arg); // DONE
 
-/*		print.c		*/
-void			ft_print(t_philo *philo, char *str);
-void			ft_print_died(t_philo *philo, char *str);
+/*		write.c		*/
+void			ft_print(t_philo *philo, char *str); // DONE
+void			ft_print_died(t_philo *philo, char *str); // DONE
 
 /*		monitor.c	*/
-void			*monitor_routine(void *arg);
+void			*monitor_routine(void *arg); 
 
 
 // safe_functions.c

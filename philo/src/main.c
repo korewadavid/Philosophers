@@ -53,9 +53,9 @@ static int	start_routines(t_data *data)
 	else
 	{
 		while (++i < data->philo_nb)
-			safe_thread_handle(&philos_th[i], philo_routine, &data->philos[i], CREATE);// TO-DO
+			safe_thread_handle(&philos_th[i], philo_routine, &data->philos[i], CREATE);
 	}
-	safe_thread_handle(&monitor, monitor_routine, &data, CREATE);// TO-DO
+	safe_thread_handle(&monitor, monitor_routine, &data, CREATE);
 	i = -1;
 	while (++i < data->philo_nb)
 		safe_thread_handle(&philos_th[i], NULL, NULL, JOIN);
@@ -69,14 +69,14 @@ static void	free_all(t_data *data)
 
 	i = -1;
 	while (++i < data->philo_nbr)
-		safe_mutex_handle(&data->philo[i].eating_mutex, DESTROY);
-	free(data->philo);
+		safe_mutex_handle(&data->philos[i].m_eating, DESTROY);
+	free(data->philos);
 	i = -1;
-	while (++i < data->philo_nbr)
-		safe_mutex_handle(&data->forks[i], DESTROY);
-	free(data->forks);
-	safe_mutex_handle(&data->print_mutex, DESTROY);
-	safe_mutex_handle(&data->write_mutex, DESTROY);
+	while (++i < data->philo_nb)
+		safe_mutex_handle(&data->m_forks[i], DESTROY);
+	free(data->m_forks);
+	safe_mutex_handle(&data->m_print, DESTROY);
+	safe_mutex_handle(&data->m_finish, DESTROY);
 }
 
 int main(int argc, char **argv)
@@ -87,8 +87,8 @@ int main(int argc, char **argv)
 		return (1);
 	if (init_all(&data, argv))
 		return (1);
-	if (start_routines(argc, argv))// TO-DO
+	if (start_routines(argc, argv))
 		return (1);
-	free_all(&data); // TO-DO
+	free_all(&data);
 	return (0);
 }

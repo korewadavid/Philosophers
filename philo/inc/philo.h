@@ -12,11 +12,11 @@
 
 /*
  * Changes
- * 1) Change 'eating' fflag to bool TO-DO
+ * 1) Change 'eating' fflag to bool
  * 2) Return (1) on error, 0 on success
  * 3) Make one_philo case creating a thread for the philo
- * 3.1) Instead of being called from main, it will be done from 'start'routines'
- * 4) start_t saved in start_routines()
+ * 3.1) Instead of being called from main, it will be done from 'start routines'
+ * 4) start_t initiated in start_routines()
 */
 #ifndef PHILO_H
 # define PHILO_H
@@ -76,36 +76,36 @@ typedef struct s_data
 }			t_data;
 
 /*	 	time.c		*/
-unsigned long	get_time(void); // DONE
-void			ft_usleep(unsigned long time); // DONE
+unsigned long	get_time(void);
+void			ft_usleep(unsigned long time);
 
 /*		input.c		*/
-int				check_input(int argc, char **argv);// DONE
+int				check_input(int argc, char **argv);
 
 /*		utils.c		*/
-long int		ft_atol(char *str);// DONE
-bool			ft_isdigit(int c);// DONE
-int 			error_exit(const char *error);// DONE
+long int		ft_atol(char *str);
+bool			ft_isdigit(int c);
+int 			error_exit(const char *error);
 
 /*		init.c		*/
-int				init_all(t_data *data, char **argv);// DONE
+int				init_all(t_data *data, char **argv);
 
 /*		routine.c	*/
-void			*philo_routine(void *arg); // DONE
+void			*philo_routine(void *arg);
 
 /*		write.c		*/
-void			ft_print(t_philo *philo, char *str); // DONE
-void			ft_print_died(t_philo *philo, char *str); // DONE
+void			ft_print(t_philo *philo, char *str);
+void			ft_print_died(t_philo *philo, char *str);
 
 /*		monitor.c	*/
 void			*monitor_routine(void *arg); 
 
 
 // safe_functions.c
-void    safe_mutex_handle(pthread_mutex_t *mutex, t_opcode opcode);
-void	safe_thread_handle(pthread_t *thread, void *(*foo)(void *),
+int    safe_mutex_handle(pthread_mutex_t *mutex, t_opcode opcode);
+int	safe_thread_handle(pthread_t *thread, void *(*foo)(void *),
 			void *data, t_opcode opcode);
-void	safe_mutex_handle(pthread_mutex_t *mutex, t_opcode opcode);
-void	*safe_malloc(size_t bytes);
+int	safe_mutex_handle(pthread_mutex_t *mutex, t_opcode opcode);
+int	*safe_malloc(size_t bytes);
 
 #endif

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../inc/philo.h"
 
 /*
  * for each philo, if time has passed since their last meal time and that time is >= die_t
@@ -33,8 +33,9 @@ static bool	philo_died(t_data *data)
 		{
 			safe_mutex_handle(&data->m_finish, LOCK);
 			data->finish = true;
+			safe_mutex_handle(&data->m_finish, UNLOCK);
 			safe_mutex_handle(&data->philo[i].m_eating, LOCK);
-			if (data->philo[i].eating == 0)
+			if (data->philo[i].eating == false)
 			{
 				safe_mutex_handle(&data->m_print, LOCK);
 				ft_print_died(&data->philo[i], "died");
@@ -47,9 +48,30 @@ static bool	philo_died(t_data *data)
 	return (false);
 }
 
-static bool	philos_finished(t_philo *philo)
+/*
+ * ?: why data->philo[i].meals_done >= data->meals
+ * If all of the philosophers have eaten (at least ?) meals_nb then mark finish as true
+ * to finish simulation
+*/
+static bool	philos_finished(t_data *data)
 {
+	int	i;
 
+	i = 0;
+	if (data->meals_nb > 0)
+	{
+		// DIFFERENT
+		while (i < data->philo_nb && data->philos[i].meals_done == data->meals_nb) 
+			i++;
+		if (data->philo_nb == i)
+		{
+			safe_mutex_handle(&data->m_finish, LOCK);
+			data->finish = true;
+			safe_mutex_handle(&data->m_finish, UNLOCK);
+			return (true);
+		}
+	}
+	return (false);
 }
 
 /*

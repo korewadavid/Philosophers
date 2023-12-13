@@ -32,7 +32,7 @@ void    *safe_malloc(size_t bytes)
  *	else, an error number (errno.h) is returned indicating the error
 */ 
 
-static void handle_mutex_error(int status, t_opcode opcode)
+static int handle_mutex_error(int status, t_opcode opcode)
 {
     if (status == 0)
         return ;
@@ -50,7 +50,7 @@ static void handle_mutex_error(int status, t_opcode opcode)
 		error_exit("Mutex is locked.");
 }
 
-static void handle_thread_error(int status, t_opcode opcode)
+static int handle_thread_error(int status, t_opcode opcode)
 {
 	if (status == 0)
 		return ;
@@ -69,7 +69,7 @@ static void handle_thread_error(int status, t_opcode opcode)
               "with each other); or thread specifies the calling thread.");
 }
 
-void    safe_mutex_handle(pthread_mutex_t *mutex, t_opcode opcode)
+int    safe_mutex_handle(pthread_mutex_t *mutex, t_opcode opcode)
 {
     if (opcode == LOCK)
         handle_mutex_error(pthread_mutex_lock(mutex), opcode);
@@ -83,7 +83,7 @@ void    safe_mutex_handle(pthread_mutex_t *mutex, t_opcode opcode)
         error_exit("Invalid opcode for mutex_handle, use <LOCK> <UNLOCK> <INIT> <DESTROY>");
 }
 
-void	safe_thread_handle(pthread_t *thread, void *(*start_routine)(void *), void *arg, t_opcode opcode)
+int	safe_thread_handle(pthread_t *thread, void *(*start_routine)(void *), void *arg, t_opcode opcode)
 {
 	if (opcode == CREATE)
 		handle_thread_error(pthread_create(thread, NULL, start_routine, arg), opcode);

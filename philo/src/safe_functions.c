@@ -6,25 +6,25 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 17:20:57 by damendez          #+#    #+#             */
-/*   Updated: 2023/12/04 15:03:39 by damendez         ###   ########.fr       */
+/*   Updated: 2023/12/14 14:43:43 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../inc/philo.h"
 
 /*
  *	Functions with embedded checks to errors	
 */
 
-void    *safe_malloc(size_t bytes)
-{
-    void    *ret;
+//int    *safe_malloc(size_t bytes)
+//{
+//    int    *ret;
 
-    ret = malloc(bytes);
-    if (ret == NULL)
-        error_exit("Error with the malloc");
-    return (ret);
-}
+//    ret = malloc(bytes);
+//    if (ret == NULL)
+//        error_exit("Error with the malloc");
+//    return (ret);
+//}
 
 /*
  *	Handling Errors:
@@ -35,7 +35,7 @@ void    *safe_malloc(size_t bytes)
 static int handle_mutex_error(int status, t_opcode opcode)
 {
     if (status == 0)
-        return ;
+        return (0);
     if (status == EINVAL && (opcode == LOCK || opcode == UNLOCK || opcode == DESTROY))
         error_exit("The value specified by mutex is invalid.");
     else if (status == EINVAL && opcode == INIT)
@@ -48,12 +48,13 @@ static int handle_mutex_error(int status, t_opcode opcode)
 		error_exit("Insufficient memory exists to initialize the mutex.");
 	else if (status == EBUSY)
 		error_exit("Mutex is locked.");
+	return (0);
 }
 
 static int handle_thread_error(int status, t_opcode opcode)
 {
 	if (status == 0)
-		return ;
+		return (0);
 	if (status == EAGAIN)
 		error_exit("Insufficient resources to create another thread.");
 	else if (status == EPERM)
@@ -67,6 +68,7 @@ static int handle_thread_error(int status, t_opcode opcode)
 	else if (status == EDEADLK)
 		error_exit("A deadlock was detected (e.g., two threads tried to join"
               "with each other); or thread specifies the calling thread.");
+	return (0);
 }
 
 int    safe_mutex_handle(pthread_mutex_t *mutex, t_opcode opcode)
@@ -81,6 +83,7 @@ int    safe_mutex_handle(pthread_mutex_t *mutex, t_opcode opcode)
         handle_mutex_error(pthread_mutex_destroy(mutex), opcode);
     else
         error_exit("Invalid opcode for mutex_handle, use <LOCK> <UNLOCK> <INIT> <DESTROY>");
+	return (0);
 }
 
 int	safe_thread_handle(pthread_t *thread, void *(*start_routine)(void *), void *arg, t_opcode opcode)
@@ -93,4 +96,5 @@ int	safe_thread_handle(pthread_t *thread, void *(*start_routine)(void *), void *
 		handle_thread_error(pthread_detach(*thread), opcode);
 	else
 		error_exit("Invalid opcode for thread_handle, use <CREATE> <JOIN> <DETACH>");
+	return (0);
 }

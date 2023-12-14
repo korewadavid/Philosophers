@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 16:08:23 by damendez          #+#    #+#             */
-/*   Updated: 2023/12/05 17:02:07 by damendez         ###   ########.fr       */
+/*   Updated: 2023/12/14 17:59:21 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
  * for each philo, if time has passed since their last meal time and that time is >= die_t
  *, and program hasnt been marked as finished, mark it as finished and print that the current philo died
 */
-static bool	philo_died(t_data *data)
+bool	philo_died(t_data *data)
 {
 	int	i;
 	unsigned long	elapsed;
@@ -27,21 +27,27 @@ static bool	philo_died(t_data *data)
 	while (++i < data->philo_nb)
 	{
 		t2 = get_time();
-		t1 = data->philo[i].last_meal_t;
+		t1 = data->philos[i].last_meal_t;
 		elapsed = t2 - t1;
-		if (t1 < t2 && (elapsed >= data->die_t) && (data->finish != true))
+		if (t1 < t2 && (elapsed > data->die_t) && (data->finish == false))
 		{
-			safe_mutex_handle(&data->m_finish, LOCK);
+			//safe_mutex_handle(&data->m_finish, LOCK);
+			pthread_mutex_lock(&data->m_finish);
 			data->finish = true;
-			safe_mutex_handle(&data->m_finish, UNLOCK);
-			safe_mutex_handle(&data->philo[i].m_eating, LOCK);
-			if (data->philo[i].eating == false)
+			//safe_mutex_handle(&data->m_finish, UNLOCK);
+			pthread_mutex_unlock(&data->m_finish);
+			//safe_mutex_handle(&data->philos[i].m_eating, LOCK);
+			pthread_mutex_lock(&data->philos[i].m_eating);
+			if (data->philos[i].eating == false)
 			{
-				safe_mutex_handle(&data->m_print, LOCK);
-				ft_print_died(&data->philo[i], "died");
-				safe_mutex_handle(&data->m_print, UNLOCK);
+				//safe_mutex_handle(&data->m_print, LOCK);
+				//pthread_mutex_lock(&data->m_print);
+				ft_print_died(&data->philos[i], "died");
+				//safe_mutex_handle(&data->m_print, UNLOCK);
+				//pthread_mutex_unlock(&data->m_print);
 			}
-			safe_mutex_handle(&data->philo[i].m_eating, UNLOCK);
+			//safe_mutex_handle(&data->philos[i].m_eating, UNLOCK);
+			pthread_mutex_unlock(&data->philos[i].m_eating);
 			return (true);
 		}
 	}
@@ -53,21 +59,22 @@ static bool	philo_died(t_data *data)
  * If all of the philosophers have eaten (at least ?) meals_nb then mark finish as true
  * to finish simulation
 */
-static bool	philos_finished(t_data *data)
+bool	philos_finished(t_data *data)
 {
 	int	i;
 
 	i = 0;
 	if (data->meals_nb > 0)
 	{
-		// DIFFERENT
-		while (i < data->philo_nb && data->philos[i].meals_done == data->meals_nb) 
+		while (i < data->philo_nb && data->philos[i].meals_done >= data->meals_nb) 
 			i++;
 		if (data->philo_nb == i)
 		{
-			safe_mutex_handle(&data->m_finish, LOCK);
+			//safe_mutex_handle(&data->m_finish, LOCK);
+			pthread_mutex_lock(&data->m_finish);
 			data->finish = true;
-			safe_mutex_handle(&data->m_finish, UNLOCK);
+			//safe_mutex_handle(&data->m_finish, UNLOCK);
+			pthread_mutex_unlock(&data->m_finish);
 			return (true);
 		}
 	}

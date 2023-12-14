@@ -6,11 +6,11 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 16:08:21 by damendez          #+#    #+#             */
-/*   Updated: 2023/12/05 19:49:52 by damendez         ###   ########.fr       */
+/*   Updated: 2023/12/14 17:15:33 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../inc/philo.h"
 
 /*
  * thread protected printf writing current timestamp in simulation, philo id and string we want to output 

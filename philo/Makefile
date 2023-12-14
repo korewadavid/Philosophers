@@ -2,8 +2,8 @@ NAME	=	philo
 HEADER	=	inc/philo.h
 SRC		=	src
 OBJ		=	obj
-SRCS	=	$(wildcard $(SRC/*.c))
-OBJS	=	$(patsubt $(SRC)/%.c, $(OBJ)/%.o, $(SRCS))
+SRCS	=	$(wildcard $(SRC)/*.c)
+OBJS	=	$(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SRCS))
 DEPS	=	$(addsuffix .d, $(basename $(SRCS)))
 CC		=	gcc
 CFLAGS	=	-Wall -Wextra -Werror -MMD
@@ -28,4 +28,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY : clean fclean re all bonus
+.PHONY : clean fclean re all

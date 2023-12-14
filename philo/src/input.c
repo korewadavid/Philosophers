@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 15:36:32 by damendez          #+#    #+#             */
-/*   Updated: 2023/12/06 15:36:32 by damendez         ###   ########.fr       */
+/*   Updated: 2023/12/14 14:31:05 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	check_argc(int argc)
 {
-	if (argc != 5 || argc != 6)
+	if (argc != 5 && argc != 6)
 		error_exit("Invalid number of imput arguments. ej: ./philo 5 800 200 200 [7]");
 	return (0);
 }
@@ -34,7 +34,7 @@ static int	check_format(int argc, char **argv)
 	{
 		while (argv[i][j])
 		{
-			if (!ft_isdigit(int)argv[i][j])
+			if (!ft_isdigit((int)argv[i][j]))
 				error_exit("All values after ./philo must be integers > 0\n");
 			else
 				j++;

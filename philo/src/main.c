@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 15:57:58 by damendez          #+#    #+#             */
-/*   Updated: 2023/12/05 19:17:52 by damendez         ###   ########.fr       */
+/*   Updated: 2023/12/14 17:49:00 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,9 @@ static int	start_routines(t_data *data)
 	int			i;
 
 	i = -1;
-	philos_th = safe_malloc(sizeof(pthread_t) * data->philo_nb);
+	philos_th = malloc(sizeof(pthread_t) * data->philo_nb);
+	if (!philos_th)
+		error_exit("Malloc error philos_th in start_routines");
 	data->start_t = get_time(); // DIFFERENT
 	if (data->philo_nb == 1)
 		safe_thread_handle(&philos_th[0], case_one_philo, &data->philos[0], CREATE);
@@ -59,6 +61,7 @@ static int	start_routines(t_data *data)
 	i = -1;
 	while (++i < data->philo_nb)
 		safe_thread_handle(&philos_th[i], NULL, NULL, JOIN);
+	safe_thread_handle(&monitor, NULL, NULL, JOIN);
 	free(philos_th);
 	return (0);
 }
@@ -68,7 +71,7 @@ static void	free_all(t_data *data)
 	int	i;
 
 	i = -1;
-	while (++i < data->philo_nbr)
+	while (++i < data->philo_nb)
 		safe_mutex_handle(&data->philos[i].m_eating, DESTROY);
 	free(data->philos);
 	i = -1;
@@ -87,7 +90,7 @@ int main(int argc, char **argv)
 		return (1);
 	if (init_all(&data, argv))
 		return (1);
-	if (start_routines(argc, argv))
+	if (start_routines(&data))
 		return (1);
 	free_all(&data);
 	return (0);

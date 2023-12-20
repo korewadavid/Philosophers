@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 16:28:22 by damendez          #+#    #+#             */
-/*   Updated: 2023/12/14 17:59:38 by damendez         ###   ########.fr       */
+/*   Updated: 2023/12/20 17:47:27 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,20 +29,20 @@ static void	eat(t_philo *philo)
 	{
 		if (philo->data->finish == true)
             return ;
-        safe_mutex_handle(&philo->data->m_forks[philo->l_fork], LOCK);
-        safe_mutex_handle(&philo->data->m_forks[philo->r_fork], LOCK);
+        pthread_mutex_lock(&philo->data->m_forks[philo->l_fork]);
+        pthread_mutex_lock(&philo->data->m_forks[philo->r_fork]);
 		ft_print(philo, "has taken a fork");
 		ft_print(philo, "has taken a fork");
-        safe_mutex_handle(&philo->m_eating, LOCK);
+        pthread_mutex_lock(&philo->m_eating);
         philo->eating = true;
         philo->last_meal_t = get_time();
         ft_print(philo, "is eating");
         ft_usleep(philo->data->eat_t);
         philo->meals_done++;
         philo->eating = false;
-        safe_mutex_handle(&philo->m_eating, UNLOCK);
-        safe_mutex_handle(&philo->data->m_forks[philo->l_fork], UNLOCK);
-        safe_mutex_handle(&philo->data->m_forks[philo->r_fork], UNLOCK);
+        pthread_mutex_unlock(&philo->m_eating);
+        pthread_mutex_unlock(&philo->data->m_forks[philo->l_fork]);
+        pthread_mutex_unlock(&philo->data->m_forks[philo->r_fork]);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 16:00:36 by damendez          #+#    #+#             */
-/*   Updated: 2023/12/14 17:45:48 by damendez         ###   ########.fr       */
+/*   Updated: 2023/12/20 17:48:42 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ typedef struct s_philo
 	int					l_fork;
 	int					r_fork;
 	int					meals_done;
-	bool				eating;// (Changed to bool)
+	bool				eating; 
 	unsigned long		last_meal_t;
 	pthread_mutex_t		m_eating;
 	t_data				*data;
@@ -102,10 +102,9 @@ void			*monitor_routine(void *arg);
 
 
 // safe_functions.c
-int    safe_mutex_handle(pthread_mutex_t *mutex, t_opcode opcode);
-int	safe_thread_handle(pthread_t *thread, void *(*foo)(void *),
-			void *data, t_opcode opcode);
-int	safe_mutex_handle(pthread_mutex_t *mutex, t_opcode opcode);
-int	*safe_malloc(size_t bytes);
+//int    safe_mutex_handle(pthread_mutex_t *mutex, t_opcode opcode);
+//int	safe_thread_handle(pthread_t *thread, void *(*foo)(void *), void *data, t_opcode opcode);
+//int	safe_mutex_handle(pthread_mutex_t *mutex, t_opcode opcode);
+//int	*safe_malloc(size_t bytes);
 
 #endif

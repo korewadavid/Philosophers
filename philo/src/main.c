@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 15:57:58 by damendez          #+#    #+#             */
-/*   Updated: 2023/12/14 17:49:00 by damendez         ###   ########.fr       */
+/*   Updated: 2023/12/20 17:31:55 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void	*case_one_philo(void *arg)
 	t_philo *philo;
 
 	philo = (t_philo *)arg;
-	safe_mutex_handle(&philo->data->m_forks[philo->l_fork], LOCK);
+	pthread_mutex_lock(&philo->data->m_forks[philo->l_fork]);
 	ft_print(philo, "has taken a fork");
 	// while (1)
 	// {
@@ -27,7 +27,7 @@ static void	*case_one_philo(void *arg)
 	// 		return (NULL);
 	// }
 	ft_usleep(philo->data->die_t);
-	safe_mutex_handle(&philo->data->m_forks[philo->l_fork], UNLOCK);
+	pthread_mutex_unlock(&philo->data->m_forks[philo->l_fork]);
 	return (NULL);
 }
 
@@ -48,38 +48,59 @@ static int	start_routines(t_data *data)
 	i = -1;
 	philos_th = malloc(sizeof(pthread_t) * data->philo_nb);
 	if (!philos_th)
-		error_exit("Malloc error philos_th in start_routines");
-	data->start_t = get_time(); // DIFFERENT
+		return (1);
 	if (data->philo_nb == 1)
-		safe_thread_handle(&philos_th[0], case_one_philo, &data->philos[0], CREATE);
+	{
+		data->start_t = get_time();
+		if (pthread_create(&philos_th[0], NULL, case_one_philo, &data->philos[0]) != 0)
+			return (1);
+	}
 	else
 	{
+		data->start_t = get_time();
 		while (++i < data->philo_nb)
-			safe_thread_handle(&philos_th[i], philo_routine, &data->philos[i], CREATE);
+		{
+			if (pthread_create(&philos_th[i], NULL, philo_routine, &data->philos[i]) != 0)
+				return (1);
+		}
 	}
-	safe_thread_handle(&monitor, monitor_routine, &data, CREATE);
+	if (pthread_create(&monitor, NULL, monitor_routine, &data) != 0)
+		return (1);
 	i = -1;
 	while (++i < data->philo_nb)
-		safe_thread_handle(&philos_th[i], NULL, NULL, JOIN);
-	safe_thread_handle(&monitor, NULL, NULL, JOIN);
+	{
+		if (pthread_join(philos_th[i], NULL) != 0)
+			return (1);
+	}
+	if (pthread_join(monitor, NULL) != 0)
+		return (1);
 	free(philos_th);
 	return (0);
 }
 
-static void	free_all(t_data *data)
+static int	free_all(t_data *data)
 {
 	int	i;
 
 	i = -1;
 	while (++i < data->philo_nb)
-		safe_mutex_handle(&data->philos[i].m_eating, DESTROY);
+	{
+		if (pthread_mutex_destroy(&data->philos[i].m_eating) != 0)
+			return (1);
+	}
 	free(data->philos);
 	i = -1;
 	while (++i < data->philo_nb)
-		safe_mutex_handle(&data->m_forks[i], DESTROY);
+	{
+		if (pthread_mutex_destroy(&data->m_forks[i]) != 0)
+			return (1);
+	}
 	free(data->m_forks);
-	safe_mutex_handle(&data->m_print, DESTROY);
-	safe_mutex_handle(&data->m_finish, DESTROY);
+	if (pthread_mutex_destroy(&data->m_print) != 0)
+		return (1);
+	if (pthread_mutex_destroy(&data->m_finish) != 0)
+		return (1);
+	return (0);
 }
 
 int main(int argc, char **argv)
@@ -92,6 +113,7 @@ int main(int argc, char **argv)
 		return (1);
 	if (start_routines(&data))
 		return (1);
-	free_all(&data);
+	if (free_all(&data))
+		return (1);
 	return (0);
 }

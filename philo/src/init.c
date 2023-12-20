@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 18:04:39 by damendez          #+#    #+#             */
-/*   Updated: 2023/12/14 14:25:29 by damendez         ###   ########.fr       */
+/*   Updated: 2023/12/20 17:26:51 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ static int	init_philos(t_data *data)
 		data->philos[i].eating = false;
 		// not last_meal_t, i want to set it when the simulation starts
 		data->philos[i].data = data;
-		safe_mutex_handle(&data->philos[i].m_eating, INIT);
+		if (pthread_mutex_init(&data->philos[i].m_eating, NULL) != 0)
+			return (1);
 	}
 	return (0);
 }
@@ -48,14 +49,19 @@ static int	init_data(t_data *data, char **argv)
 	data->finish = false;
 	data->philos = malloc(sizeof(t_philo) * data->philo_nb);
 	if (!data->philos)
-		error_exit("Malloc error Philosopher array");
+		return (1);
 	data->m_forks = malloc(sizeof(pthread_mutex_t) * data->philo_nb);
 	if (!data->m_forks)
-		error_exit("Malloc error Forks array");
+		return (1);
 	while (++i < data->philo_nb)
-		safe_mutex_handle(&data->m_forks[i], INIT);
-	safe_mutex_handle(&data->m_finish, INIT);
-	safe_mutex_handle(&data->m_print, INIT);
+	{
+		if (pthread_mutex_init(&data->m_forks[i], NULL) != 0)
+			return (1);
+	}
+	if (pthread_mutex_init(&data->m_finish, NULL) != 0)
+		return (1);
+	if (pthread_mutex_init(&data->m_print, NULL) != 0)
+		return (1);
 	return (0);
 }
 

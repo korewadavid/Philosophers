@@ -98,7 +98,9 @@ void			ft_print(t_philo *philo, char *str);
 void			ft_print_died(t_philo *philo, char *str);
 
 /*		monitor.c	*/
-void			*monitor_routine(void *arg); 
+void			*monitor_routine(void *arg);
+bool			philos_finished(t_data *data);
+bool			philo_died(t_data *data);
 
 
 // safe_functions.c

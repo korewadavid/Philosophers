@@ -78,29 +78,20 @@ static int	start_routines(t_data *data)
 	return (0);
 }
 
-static int	free_all(t_data *data)
+static void	free_all(t_data *data)
 {
 	int	i;
 
 	i = -1;
 	while (++i < data->philo_nb)
-	{
-		if (pthread_mutex_destroy(&data->philos[i].m_eating) != 0)
-			return (1);
-	}
+		pthread_mutex_destroy(&data->philos[i].m_eating);
 	free(data->philos);
 	i = -1;
 	while (++i < data->philo_nb)
-	{
-		if (pthread_mutex_destroy(&data->m_forks[i]) != 0)
-			return (1);
-	}
+		pthread_mutex_destroy(&data->m_forks[i])
 	free(data->m_forks);
-	if (pthread_mutex_destroy(&data->m_print) != 0)
-		return (1);
-	if (pthread_mutex_destroy(&data->m_finish) != 0)
-		return (1);
-	return (0);
+	pthread_mutex_destroy(&data->m_print);
+	pthread_mutex_destroy(&data->m_finish)
 }
 
 int main(int argc, char **argv)
@@ -113,7 +104,8 @@ int main(int argc, char **argv)
 		return (1);
 	if (start_routines(&data))
 		return (1);
-	if (free_all(&data))
-		return (1);
+	// if (free_all(&data))
+	// 	return (1);
+	free_all(&data);
 	return (0);
 }

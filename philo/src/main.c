@@ -21,11 +21,6 @@ static void	*case_one_philo(void *arg)
 	philo = (t_philo *)arg;
 	pthread_mutex_lock(&philo->data->m_forks[philo->l_fork]);
 	ft_print(philo, "has taken a fork");
-	// while (1)
-	// {
-	// 	if (philo->data->finish == true)
-	// 		return (NULL);
-	// }
 	ft_usleep(philo->data->die_t);
 	pthread_mutex_unlock(&philo->data->m_forks[philo->l_fork]);
 	return (NULL);

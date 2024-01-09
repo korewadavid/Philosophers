@@ -6,7 +6,7 @@ SRCS	=	$(wildcard $(SRC)/*.c)
 OBJS	=	$(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SRCS))
 DEPS	=	$(addsuffix .d, $(basename $(SRCS)))
 CC		=	gcc
-CFLAGS	=	-Wall -Wextra -Werror -MMD -pthread
+CFLAGS	=	-Wall -Wextra -Werror -MMD
 RM		=	rm -rf
 
 all: $(NAME)

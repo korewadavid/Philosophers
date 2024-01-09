@@ -12,38 +12,42 @@
 
 #include "../inc/philo.h"
 
-static void	sleep_and_think(t_philo *philo)
+static void	ft_sleep_think(t_philo *philo)
 {
-    if (philo->data->finish == true)
-        return ;
-    ft_print(philo, "is sleeping");
-    ft_usleep(philo->data->sleep_t);
-    ft_print(philo, "is thinking");
+	if (philo->data->finish == true)
+		return ;
+	ft_print(philo, "is sleeping");
+	ft_usleep(philo->data->sleep_t);
+	ft_print(philo, "is thinking");
 }
 
-static void	eat(t_philo *philo)
+static void	ft_eat(t_philo *philo)
 {
-    if (philo->data->finish == true)
-        return ;
-    else if (philo->data->meals_nb == -1 || (philo->data->meals_nb > 0 && philo->meals_done < philo->data->meals_nb))
-	{
-		if (philo->data->finish == true)
-            return ;
-        pthread_mutex_lock(&philo->data->m_forks[philo->l_fork]);
-        pthread_mutex_lock(&philo->data->m_forks[philo->r_fork]);
-		ft_print(philo, "has taken a fork");
-		ft_print(philo, "has taken a fork");
-        pthread_mutex_lock(&philo->m_eating);
-        philo->eating = true;
-        philo->last_meal_t = get_time();
-        ft_print(philo, "is eating");
-        ft_usleep(philo->data->eat_t);
-        philo->meals_done++;
-        philo->eating = false;
-        pthread_mutex_unlock(&philo->m_eating);
-        pthread_mutex_unlock(&philo->data->m_forks[philo->l_fork]);
-        pthread_mutex_unlock(&philo->data->m_forks[philo->r_fork]);
-	}
+	if (philo->data->finish == true)
+		return ;
+	pthread_mutex_lock(&philo->data->m_forks[philo->l_fork]);
+	pthread_mutex_lock(&philo->data->m_forks[philo->r_fork]);
+	ft_print(philo, "has taken a fork");
+	ft_print(philo, "has taken a fork");
+	pthread_mutex_lock(&philo->m_eating);
+	philo->eating = 1;
+	philo->last_meal_t = get_time();
+	ft_print(philo, "is eating");
+	ft_usleep(philo->data->eat_t);
+	philo->meals_done++;
+	philo->eating = 0;
+	pthread_mutex_unlock(&philo->m_eating);
+	pthread_mutex_unlock(&philo->data->m_forks[philo->l_fork]);
+	pthread_mutex_unlock(&philo->data->m_forks[philo->r_fork]);
+}
+
+void	wait_start(t_philo *philo)
+{
+	if (philo->id % 2 == 0)
+		ft_usleep(philo->data->eat_t / 2);
+	else if (philo->data->philo_nb % 2 != 0
+		&& philo->id == philo->data->philo_nb)
+		ft_usleep(philo->data->eat_t + 10);
 }
 
 /*
@@ -56,20 +60,25 @@ static void	eat(t_philo *philo)
 */
 void    *philo_routine(void *arg)
 {
-    t_philo *philo;
+	t_philo	*philo;
 
-    philo = (t_philo *)arg;
-    if (philo->id % 2 == 0)
-        ft_usleep(philo->data->eat_t / 2);
-    else if (philo->data->philo_nb % 2 != 0
-        && philo->id == philo->data->philo_nb)
-        ft_usleep(philo->data->eat_t + 10);
-    while (1)
-    {
-        if (philo->data->finish == true)
-            return (NULL);
-        eat(philo);
-		sleep_and_think(philo);
-    }
-    return (NULL);
+	philo = (t_philo *)arg;
+	if (philo->data->philo_nb == 1)
+	{
+		pthread_mutex_lock(&philo->data->m_forks[philo->l_fork]);
+		ft_print(philo, "has taken a fork");
+		pthread_mutex_unlock(&philo->data->m_forks[philo->l_fork]);
+		ft_usleep(philo->data->die_t);
+		ft_print_died(philo->data->philo, "died");
+		return (NULL);
+	}
+	wait_start(philo);
+	while (1)
+	{
+		if (philo->data->finish == true)
+			return (NULL);
+		ft_eat(philo);
+		ft_sleep_think(philo);
+	}
+	return (NULL);
 }

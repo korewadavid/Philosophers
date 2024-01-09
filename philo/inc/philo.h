@@ -10,103 +10,67 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-/*
- * Changes
- * 1) Change 'eating' fflag to bool
- * 2) Return (1) on error, 0 on success
- * 3) Make one_philo case creating a thread for the philo
- * 3.1) Instead of being called from main, it will be done from 'start routines'
- * 4) start_t initiated in start_routines()
-*/
 #ifndef PHILO_H
 # define PHILO_H
 
-#include <stdio.h> // printf
-#include <stdlib.h> // malloc free
-#include <unistd.h> // write usleep
-#include <stdbool.h> // bools
-#include <pthread.h> // threads and mutex
-#include <sys/time.h> //gettimeofday
-#include <limits.h> // intmax overflow
-#include <errno.h> // safe functions
-
-/*
- * Enum for safe mutex and thread handle functions
-*/
-typedef enum e_opcode
-{
-	LOCK,
-	UNLOCK,
-	INIT,
-	DESTROY,
-	CREATE,
-	JOIN,
-	DETACH,
-}					t_opcode;
-
-// *** STRUCTS ***
+# include <stdio.h>
+# include <stdlib.h>
+# include <sys/time.h>
+# include <pthread.h>
+# include <unistd.h>
+# include <stdbool.h>
 
 typedef struct s_data	t_data;
 
 typedef struct s_philo
 {
 	int					id;
-	int					l_fork;
 	int					r_fork;
-	int					meals_done;
-	bool				eating; 
-	unsigned long		last_meal_t;
-	pthread_mutex_t		m_eating;
+	int					l_fork;
 	t_data				*data;
+	int					meals_done;
+	unsigned long		last_meal_t;
+	int					eating;
+	pthread_mutex_t		m_eating;
 }			t_philo;
 
 typedef struct s_data
 {
 	int				philo_nb;
-	int				meals_nb;
 	unsigned long	die_t;
 	unsigned long	eat_t;
 	unsigned long	sleep_t;
+	int				meals;
 	unsigned long	start_t;
+	t_philo			*philo;
+	pthread_mutex_t	*m_forks;
+	pthread_mutex_t	m_print;
 	bool			finish;
 	pthread_mutex_t	m_finish;
-	pthread_mutex_t	m_print;
-	pthread_mutex_t	*m_forks;
-	t_philo			*philos;
 }			t_data;
 
 /*	 	time.c		*/
 unsigned long	get_time(void);
 void			ft_usleep(unsigned long time);
 
-/*		input.c		*/
-int				check_input(int argc, char **argv);
+/*		errors.c	*/
+int				input_ok(int ac, char **av);
 
 /*		utils.c		*/
 long int		ft_atol(char *str);
-bool			ft_isdigit(int c);
-int 			error_exit(const char *error);
+int				ft_isdigit(int c);
 
 /*		init.c		*/
-int				init_all(t_data *data, char **argv);
+int				init_all(t_data *data, char **av);
 
-/*		routine.c	*/
+/*		actions.c	*/
 void			*philo_routine(void *arg);
 
-/*		write.c		*/
+/*		print.c		*/
 void			ft_print(t_philo *philo, char *str);
 void			ft_print_died(t_philo *philo, char *str);
 
-/*		monitor.c	*/
-void			*monitor_routine(void *arg);
-bool			philos_finished(t_data *data);
-bool			philo_died(t_data *data);
-
-
-// safe_functions.c
-//int    safe_mutex_handle(pthread_mutex_t *mutex, t_opcode opcode);
-//int	safe_thread_handle(pthread_t *thread, void *(*foo)(void *), void *data, t_opcode opcode);
-//int	safe_mutex_handle(pthread_mutex_t *mutex, t_opcode opcode);
-//int	*safe_malloc(size_t bytes);
+/*		checker.c	*/
+void			*go_on(void *arg);
 
 #endif

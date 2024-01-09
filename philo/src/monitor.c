@@ -18,26 +18,26 @@
 */
 bool	philo_died(t_data *data)
 {
-	int	i;
-	unsigned long	elapsed;
-	unsigned long	t1;
+	int				i;
+	unsigned long	t;
 	unsigned long	t2;
+	unsigned long	t1;
 
 	i = -1;
 	while (++i < data->philo_nb)
 	{
 		t2 = get_time();
-		t1 = data->philos[i].last_meal_t;
-		elapsed = t2 - t1;
-		if (t1 < t2 && (elapsed > data->die_t) && (data->finish == false))
+		t1 = data->philo[i].last_meal_t;
+		t = t2 - t1;
+		if (t2 > t1 && (t > data->die_t) && (data->finish == false))
 		{
 			pthread_mutex_lock(&data->m_finish);
 			data->finish = true;
 			pthread_mutex_unlock(&data->m_finish);
-			pthread_mutex_lock(&data->philos[i].m_eating);
-			if (data->philos[i].eating == false)
-				ft_print_died(&data->philos[i], "died");
-			pthread_mutex_unlock(&data->philos[i].m_eating);
+			pthread_mutex_lock(&data->philo[i].m_eating);
+			if (data->philo[i].eating == 0)
+				ft_print_died(&data->philo[i], "died");
+			pthread_mutex_unlock(&data->philo[i].m_eating);
 			return (true);
 		}
 	}
@@ -48,16 +48,16 @@ bool	philo_died(t_data *data)
  * If all of the philosophers have eaten (at least ?) meals_nb then mark finish as true
  * to finish simulation
 */
-bool	philos_finished(t_data *data)
+bool	all_finished(t_data *data)
 {
 	int	i;
 
 	i = 0;
-	if (data->meals_nb > 0)
+	if (data->meals > 0)
 	{
-		while (i < data->philo_nb && data->philos[i].meals_done >= data->meals_nb) 
+		while (i < data->philo_nb && data->philo[i].meals_done >= data->meals)
 			i++;
-		if (data->philo_nb == i)
+		if (i == data->philo_nb)
 		{
 			pthread_mutex_lock(&data->m_finish);
 			data->finish = true;
@@ -71,7 +71,7 @@ bool	philos_finished(t_data *data)
 /*
  * Constently checks if a philo qualifies as dead or if theyve all eaten meal_nb
 */
-void	*monitor_routine(void *arg)
+void	*go_on(void *arg)
 {
 	t_data	*data;
 
@@ -82,7 +82,7 @@ void	*monitor_routine(void *arg)
 	{
 		if (philo_died(data) == true)
 			return (NULL);
-		if (philos_finished(data) == true)
+		if (all_finished(data) == true)
 			return (NULL);
 	}
 }

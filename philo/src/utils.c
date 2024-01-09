@@ -12,15 +12,11 @@
 
 #include "../inc/philo.h"
 
-bool	ft_isdigit(int c)
+int	ft_isdigit(int c)
 {
-	return (c >= 48 && c <= 57);
-}
-
-int error_exit(const char *error)
-{
-    printf("%s\n", error);
-    return (1);
+	if (c >= '0' && c <= '9')
+		return (1);
+	return (0);
 }
 
 /*
@@ -30,29 +26,27 @@ int error_exit(const char *error)
  * 4) Iterate through the string while the characters are digits.
  * updating ret adding current char as an int
 */
-long int    ft_atol(char *str)
+long int	ft_atol(char *str)
 {
-    long int    res;
-    long int    sign;
-    long int    i;
+	long int	res;
+	long int	sign;
+	long int	i;
 
-    res = 0;
-    sign = 1;
-    i = 0;
-
+	res = 0;
+	sign = 1;
+	i = 0;
 	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\v'
 		|| str[i] == '\f' || str[i] == '\r' || str[i] == '\n')
 		i++;
-    if (str[i] == '-' || str[i] == '+')
-    {
-        if (str[i] == '-')
-            sign = -1;
-        i++;
-    }
-    if (str[i] == '\0')
-        return (0);
-	
-    while (ft_isdigit((int)str[i]))
+	if (str[i] == '-' || str[i] == '+')
+	{
+		if (str[i] == '-')
+			sign = -1;
+		i++;
+	}
+	if (str[i] == '\0')
+		return (0);
+	while (ft_isdigit((int)str[i]) != 0)
 	{
 		res = res * 10 + str[i] - '0';
 		i++;

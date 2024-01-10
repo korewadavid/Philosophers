@@ -12,9 +12,9 @@
 
 #include "../inc/philo.h"
 
-static int	ft_launch(t_data *data)
+static int	start_threads(t_data *data)
 {
-	pthread_t	checker;
+	pthread_t	monitor;
 	int			i;
 	pthread_t	*philo_th;
 
@@ -26,13 +26,13 @@ static int	ft_launch(t_data *data)
 	while (++i < data->philo_nb)
 		if (pthread_create(&philo_th[i], NULL, &philo_routine, &data->philo[i]) != 0)
 			return (0);
-	if (pthread_create(&checker, NULL, &go_on, data) != 0)
+	if (pthread_create(&monitor, NULL, &monitor_routine, data) != 0)
 		return (0);
 	i = -1;
 	while (++i < data->philo_nb)
 		if (pthread_join(philo_th[i], NULL) != 0)
 			return (0);
-	if (pthread_join(checker, NULL) != 0)
+	if (pthread_join(monitor, NULL) != 0)
 		return (0);
 	free(philo_th);
 	return (1);
@@ -54,15 +54,15 @@ static void	free_all(t_data *data)
 	pthread_mutex_destroy(&data->m_finish);
 }
 
-int	main(int ac, char **av)
+int	main(int argc, char **argv)
 {
 	t_data	data;
 
-	if (!input_ok(ac, av))
+	if (!check_input(argc, argv))
 		return (0);
-	if (!init_all(&data, av))
+	if (!init_all(&data, argv))
 		return (0);
-	if (!ft_launch(&data))
+	if (!start_threads(&data))
 		return (0);
 	free_all(&data);
 	return (1);

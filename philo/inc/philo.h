@@ -27,50 +27,50 @@ typedef struct s_philo
 	int					id;
 	int					r_fork;
 	int					l_fork;
-	t_data				*data;
-	int					meals_done;
-	unsigned long		last_meal_t;
+	int					meals_done;	
 	int					eating;
+	unsigned long		last_meal_t;
 	pthread_mutex_t		m_eating;
+	t_data				*data;
 }			t_philo;
 
 typedef struct s_data
 {
 	int				philo_nb;
+	int				meals;
 	unsigned long	die_t;
 	unsigned long	eat_t;
 	unsigned long	sleep_t;
-	int				meals;
 	unsigned long	start_t;
-	t_philo			*philo;
+	bool			finish;
 	pthread_mutex_t	*m_forks;
 	pthread_mutex_t	m_print;
-	bool			finish;
 	pthread_mutex_t	m_finish;
+	t_philo			*philo;
 }			t_data;
 
 /*	 	time.c		*/
 unsigned long	get_time(void);
 void			ft_usleep(unsigned long time);
 
-/*		errors.c	*/
-int				input_ok(int ac, char **av);
+/*		input.c	*/
+int				check_input(int argc, char **argv);
 
 /*		utils.c		*/
 long int		ft_atol(char *str);
 int				ft_isdigit(int c);
 
 /*		init.c		*/
-int				init_all(t_data *data, char **av);
+int				init_all(t_data *data, char **argv);
 
-/*		actions.c	*/
+/*		routine.c	*/
 void			*philo_routine(void *arg);
 
-/*		print.c		*/
+/*		write.c		*/
 void			ft_print(t_philo *philo, char *str);
 void			ft_print_died(t_philo *philo, char *str);
 
-/*		checker.c	*/
-void			*go_on(void *arg);
+/*		monitor.c	*/
+void			*monitor_routine(void *arg);
 
 #endif

@@ -50,18 +50,18 @@ static int	init_philos(t_data *data)
 	return (1);
 }
 
-static int	init_data(t_data *data, char **av)
+static int	init_data(t_data *data, char **argv)
 {
 	int	i;
 
 	i = -1;
-	data->philo_nb = ft_atol(av[1]);
-	data->die_t = ft_atol(av[2]);
-	data->eat_t = ft_atol(av[3]);
-	data->sleep_t = ft_atol(av[4]);
+	data->philo_nb = ft_atol(argv[1]);
+	data->die_t = ft_atol(argv[2]);
+	data->eat_t = ft_atol(argv[3]);
+	data->sleep_t = ft_atol(argv[4]);
 	data->meals = -1;
-	if (av[5])
-		data->meals = ft_atol(av[5]);
+	if (argv[5])
+		data->meals = ft_atol(argv[5]);
 	//data->start_t = get_time()
 	data->m_forks = malloc(sizeof(pthread_mutex_t) * data->philo_nb);
 	if (!data->m_forks)
@@ -81,9 +81,9 @@ static int	init_data(t_data *data, char **av)
  * 3) Initalize project mutexs (data mutexes for printing and 
  * for when program needs to finish, forks, and philo mutex for when eating)
 */
-int	init_all(t_data *data, char **av)
+int	init_all(t_data *data, char **argv)
 {
-	if (!init_data(data, av))
+	if (!init_data(data, argv))
 		return (0);
 	if (!init_philos(data))
 		return (0);

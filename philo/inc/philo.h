@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: damendez <damendez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 16:00:36 by damendez          #+#    #+#             */
-/*   Updated: 2023/12/20 17:48:42 by damendez         ###   ########.fr       */
+/*   Updated: 2024/01/11 17:48:32 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,17 @@
 # include <pthread.h>
 # include <unistd.h>
 # include <stdbool.h>
+
+typedef enum e_opcode
+{
+	LOCK,
+	UNLOCK,
+	INIT,
+	DESTROY,
+	CREATE,
+	JOIN,
+	DETACH,
+}					t_opcode;
 
 typedef struct s_data	t_data;
 
@@ -72,5 +83,9 @@ void			ft_print_died(t_philo *philo, char *str);
 
 /*		monitor.c	*/
 void			*monitor_routine(void *arg);
+
+/*		safe_func.c	*/
+void    safe_thread_handle(pthread_t *thread, void *(*foo)(void *), void *data, t_opcode opcode);
+void	safe_mutex_handle(pthread_mutex_t *mutex, t_opcode opcode);
 
 #endif

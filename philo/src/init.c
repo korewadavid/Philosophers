@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: damendez <damendez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 18:04:39 by damendez          #+#    #+#             */
-/*   Updated: 2024/01/10 13:28:03 by damendez         ###   ########.fr       */
+/*   Updated: 2024/01/11 17:40:59 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,12 @@ static int	init_mutex(t_data *data)
 	i = -1;
 	while (++i < data->philo_nb)
 	{
-		pthread_mutex_init(&data->m_forks[i], NULL);
-		pthread_mutex_init(&data->philo[i].m_eating, NULL);
+		safe_mutex_handle(&data->m_forks[i], INIT);
+		safe_mutex_handle(&data->philo[i].m_eating, INIT);
 	}
-	pthread_mutex_init(&data->m_print, NULL);
-	pthread_mutex_init(&data->m_finish, NULL);
-	return (1);
+	safe_mutex_handle(&data->m_print, INIT);
+	safe_mutex_handle(&data->m_finish, INIT);
+	return (0);
 }
 
 static int	init_philos(t_data *data)
@@ -34,7 +34,7 @@ static int	init_philos(t_data *data)
 	i = -1;
 	data->philo = malloc(sizeof(t_philo) * data->philo_nb);
 	if (!data->philo)
-		return (0);
+		return (1);
 	while (++i < data->philo_nb)
 	{
 		data->philo[i].id = i + 1;
@@ -47,7 +47,7 @@ static int	init_philos(t_data *data)
 		data->philo[i].last_meal_t = get_time();
 		data->philo[i].eating = 0;
 	}
-	return (1);
+	return (0);
 }
 
 static int	init_data(t_data *data, char **argv)
@@ -64,13 +64,13 @@ static int	init_data(t_data *data, char **argv)
 		data->meals = ft_atol(argv[5]);
 	data->m_forks = malloc(sizeof(pthread_mutex_t) * data->philo_nb);
 	if (!data->m_forks)
-		return (0);
+		return (1);
 	while (++i < data->philo_nb)
-		pthread_mutex_init(&data->m_forks[i], NULL);
-	pthread_mutex_init(&data->m_print, NULL);
+		safe_mutex_handle(&data->m_forks[i], INIT);
+	safe_mutex_handle(&data->m_print, INIT);
 	data->finish = false;
-	pthread_mutex_init(&data->m_finish, NULL);
-	return (1);
+	safe_mutex_handle(&data->m_finish, INIT);
+	return (0);
 }
 
 /*
@@ -82,11 +82,11 @@ static int	init_data(t_data *data, char **argv)
 */
 int	init_all(t_data *data, char **argv)
 {
-	if (!init_data(data, argv))
-		return (0);
-	if (!init_philos(data))
-		return (0);
-	if (!init_mutex(data))
-		return (0);
-	return (1);
+	if (init_data(data, argv))
+		return (1);
+	if (init_philos(data))
+		return (1);
+	if (init_mutex(data))
+		return (1);
+	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   time.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: damendez <damendez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 15:06:46 by damendez          #+#    #+#             */
-/*   Updated: 2024/01/10 13:33:34 by damendez         ###   ########.fr       */
+/*   Updated: 2024/01/11 16:01:14 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,6 @@ unsigned long	get_time(void)
 	struct timeval	tv;
 
 	if (gettimeofday(&tv, NULL))
-		return (0);
+		return (1);
 	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }

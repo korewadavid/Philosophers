@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: damendez <damendez@student.42barcel>       +#+  +:+       +#+        */
+/*   By: damendez <damendez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/01 16:21:15 by damendez          #+#    #+#             */
-/*   Updated: 2024/01/10 13:35:07 by damendez         ###   ########.fr       */
+/*   Updated: 2024/01/11 17:52:14 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 int	ft_isdigit(int c)
 {
 	if (c >= '0' && c <= '9')
-		return (1);
-	return (0);
+		return (0);
+	return (1);
 }
 
 /*
@@ -45,7 +45,7 @@ long int	ft_atol(char *str)
 		i++;
 	}
 	if (str[i] == '\0')
-		return (0);
+		return (1);
 	while (ft_isdigit((int)str[i]) != 0)
 	{
 		res = res * 10 + str[i] - '0';

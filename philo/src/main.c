@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: damendez <damendez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 15:57:58 by damendez          #+#    #+#             */
-/*   Updated: 2024/01/10 13:25:55 by damendez         ###   ########.fr       */
+/*   Updated: 2024/01/11 17:49:46 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,22 +21,17 @@ static int	start_threads(t_data *data)
 	i = -1;
 	philo_th = (pthread_t *)malloc(sizeof(pthread_t) * data->philo_nb);
 	if (!philo_th)
-		return (0);
+		return (1);
 	data->start_t = get_time();
 	while (++i < data->philo_nb)
-		if (pthread_create(&philo_th[i], NULL,
-				&philo_routine, &data->philo[i]) != 0)
-			return (0);
-	if (pthread_create(&monitor, NULL, &monitor_routine, data) != 0)
-		return (0);
+		safe_thread_handle(&philo_th[i], &philo_routine, &data->philo[i], CREATE);
+	safe_thread_handle(&monitor, &monitor_routine, data, CREATE);
 	i = -1;
 	while (++i < data->philo_nb)
-		if (pthread_join(philo_th[i], NULL) != 0)
-			return (0);
-	if (pthread_join(monitor, NULL) != 0)
-		return (0);
+		safe_thread_handle(&philo_th[i], NULL, NULL, JOIN);
+	safe_thread_handle(&monitor, NULL, NULL, JOIN);
 	free(philo_th);
-	return (1);
+	return (0);
 }
 
 static void	free_all(t_data *data)
@@ -45,26 +40,26 @@ static void	free_all(t_data *data)
 
 	i = -1;
 	while (++i < data->philo_nb)
-		pthread_mutex_destroy(&data->philo[i].m_eating);
+		safe_mutex_handle(&data->philo[i].m_eating, DESTROY);
 	free(data->philo);
 	i = -1;
 	while (++i < data->philo_nb)
-		pthread_mutex_destroy(&data->m_forks[i]);
+		safe_mutex_handle(&data->m_forks[i], DESTROY);
 	free(data->m_forks);
-	pthread_mutex_destroy(&data->m_print);
-	pthread_mutex_destroy(&data->m_finish);
+	safe_mutex_handle(&data->m_print, DESTROY);
+	safe_mutex_handle(&data->m_finish, DESTROY);
 }
 
 int	main(int argc, char **argv)
 {
 	t_data	data;
 
-	if (!check_input(argc, argv))
-		return (0);
-	if (!init_all(&data, argv))
-		return (0);
+	if (check_input(argc, argv))
+		return (1);
+	if (init_all(&data, argv))
+		return (1);
 	if (!start_threads(&data))
-		return (0);
+		return (1);
 	free_all(&data);
-	return (1);
+	return (0);
 }

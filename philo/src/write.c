@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   write.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: damendez <damendez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 16:08:21 by damendez          #+#    #+#             */
-/*   Updated: 2024/01/10 13:37:05 by damendez         ###   ########.fr       */
+/*   Updated: 2024/01/11 17:46:54 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@ void	ft_print(t_philo *philo, char *str)
 {
 	if (philo->data->finish == true)
 		return ;
-	pthread_mutex_lock(&philo->data->m_print);
+	safe_mutex_handle(&philo->data->m_print, LOCK);
 	printf("%lu\t%d\t%s\n", get_time() - philo->data->start_t, philo->id, str);
-	pthread_mutex_unlock(&philo->data->m_print);
+	safe_mutex_handle(&philo->data->m_print, UNLOCK);
 }
 
 void	ft_print_died(t_philo *philo, char *str)
 {
-	pthread_mutex_lock(&philo->data->m_print);
+	safe_mutex_handle(&philo->data->m_print, LOCK);
 	printf("%lu\t%d\t%s\n", get_time() - philo->data->start_t, philo->id, str);
-	pthread_mutex_unlock(&philo->data->m_print);
+	safe_mutex_handle(&philo->data->m_print, UNLOCK);
 }

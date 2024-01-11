@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: damendez <damendez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 15:36:32 by damendez          #+#    #+#             */
-/*   Updated: 2024/01/10 13:29:23 by damendez         ###   ########.fr       */
+/*   Updated: 2024/01/11 17:59:30 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ static int	check_nb_args(int argc)
 	if (argc < 5 || argc > 6)
 	{
 		printf("Input should be: ./philo + 4 or 5 args\n");
-		return (0);
+		return (1);
 	}
-	return (1);
+	return (0);
 }
 
 /*
@@ -38,11 +38,11 @@ static int	check_all_dig(int argc, char **argv)
 	{
 		while (argv[i][j])
 		{
-			if (!ft_isdigit((int)argv[i][j]) ||
+			if (ft_isdigit((int)argv[i][j]) ||
 					(argc == 6 && ft_atol(argv[5]) <= 0))
 			{
 				printf("All values after ./philo must be integers > 0\n");
-				return (0);
+				return (1);
 			}
 			else
 				j++;
@@ -50,7 +50,7 @@ static int	check_all_dig(int argc, char **argv)
 		i++;
 		j = 0;
 	}
-	return (1);
+	return (0);
 }
 
 /*
@@ -64,15 +64,15 @@ static int	least_60(char **argv)
 	i = 2;
 	while (i < 5)
 	{
-		if (ft_atol(argv[i]) < 60)
+		if (!ft_atol(argv[i]) < 60)
 		{
 			printf("All times must be >= 60\n");
-			return (0);
+			return (1);
 		}
 		else
 			i++;
 	}
-	return (1);
+	return (0);
 }
 
 /*
@@ -85,13 +85,13 @@ int	check_input(int argc, char **argv)
 {
 	long	n;
 
-	if (!check_nb_args(argc) || !check_all_dig(argc, argv) || !least_60(argv))
-		return (0);
+	if (check_nb_args(argc) || check_all_dig(argc, argv) || least_60(argv))
+		return (1);
 	n = ft_atol(argv[1]);
 	if (n < 1 || n > 200)
 	{
 		printf("Number of philosophers should be 1-200\n");
-		return (0);
+		return (1);
 	}
-	return (1);
+	return (0);
 }

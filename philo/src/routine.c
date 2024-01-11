@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: damendez <damendez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 16:28:22 by damendez          #+#    #+#             */
-/*   Updated: 2024/01/10 13:32:28 by damendez         ###   ########.fr       */
+/*   Updated: 2024/01/11 17:46:02 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,20 +25,20 @@ static void	ft_eat(t_philo *philo)
 {
 	if (philo->data->finish == true)
 		return ;
-	pthread_mutex_lock(&philo->data->m_forks[philo->l_fork]);
-	pthread_mutex_lock(&philo->data->m_forks[philo->r_fork]);
+	safe_mutex_handle(&philo->data->m_forks[philo->l_fork], LOCK);
+	safe_mutex_handle(&philo->data->m_forks[philo->r_fork], LOCK);
 	ft_print(philo, "has taken a fork");
 	ft_print(philo, "has taken a fork");
-	pthread_mutex_lock(&philo->m_eating);
+	safe_mutex_handle(&philo->m_eating, LOCK);
 	philo->eating = 1;
 	philo->last_meal_t = get_time();
 	ft_print(philo, "is eating");
 	ft_usleep(philo->data->eat_t);
 	philo->meals_done++;
 	philo->eating = 0;
-	pthread_mutex_unlock(&philo->m_eating);
-	pthread_mutex_unlock(&philo->data->m_forks[philo->l_fork]);
-	pthread_mutex_unlock(&philo->data->m_forks[philo->r_fork]);
+	safe_mutex_handle(&philo->m_eating, UNLOCK);
+	safe_mutex_handle(&philo->data->m_forks[philo->l_fork], UNLOCK);
+	safe_mutex_handle(&philo->data->m_forks[philo->r_fork], UNLOCK);
 }
 
 void	wait_start(t_philo *philo)
@@ -65,9 +65,9 @@ void	*philo_routine(void *arg)
 	philo = (t_philo *)arg;
 	if (philo->data->philo_nb == 1)
 	{
-		pthread_mutex_lock(&philo->data->m_forks[philo->l_fork]);
+		safe_mutex_handle(&philo->data->m_forks[philo->l_fork], LOCK);
 		ft_print(philo, "has taken a fork");
-		pthread_mutex_unlock(&philo->data->m_forks[philo->l_fork]);
+		safe_mutex_handle(&philo->data->m_forks[philo->l_fork], UNLOCK);
 		ft_usleep(philo->data->die_t);
 		ft_print_died(philo->data->philo, "died");
 		return (NULL);

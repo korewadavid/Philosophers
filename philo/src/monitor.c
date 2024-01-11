@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: damendez <damendez@student.42barcel>       +#+  +:+       +#+        */
+/*   By: damendez <damendez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 16:08:23 by damendez          #+#    #+#             */
-/*   Updated: 2024/01/10 13:31:20 by damendez         ###   ########.fr       */
+/*   Updated: 2024/01/11 17:43:51 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,13 @@ bool	philo_died(t_data *data)
 		elapsed = t2 - t1;
 		if (t2 > t1 && (elapsed >= data->die_t) && (data->finish == false))
 		{
-			pthread_mutex_lock(&data->m_finish);
+			safe_mutex_handle(&data->m_finish, LOCK);
 			data->finish = true;
-			pthread_mutex_unlock(&data->m_finish);
-			pthread_mutex_lock(&data->philo[i].m_eating);
+			safe_mutex_handle(&data->m_finish, UNLOCK);
+			safe_mutex_handle(&data->philo[i].m_eating, LOCK);
 			if (data->philo[i].eating == 0)
 				ft_print_died(&data->philo[i], "died");
-			pthread_mutex_unlock(&data->philo[i].m_eating);
+			safe_mutex_handle(&data->philo[i].m_eating, UNLOCK);
 			return (true);
 		}
 	}
@@ -61,9 +61,9 @@ bool	all_finished(t_data *data)
 			i++;
 		if (i == data->philo_nb)
 		{
-			pthread_mutex_lock(&data->m_finish);
+			safe_mutex_handle(&data->m_finish, LOCK);
 			data->finish = true;
-			pthread_mutex_unlock(&data->m_finish);
+			safe_mutex_handle(&data->m_finish, UNLOCK);
 			return (true);
 		}
 	}

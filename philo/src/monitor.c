@@ -6,15 +6,17 @@
 /*   By: damendez <damendez@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 16:08:23 by damendez          #+#    #+#             */
-/*   Updated: 2023/12/20 18:00:57 by damendez         ###   ########.fr       */
+/*   Updated: 2024/01/10 13:31:20 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
 /*
- * for each philo, if time has passed since their last meal time and that time is >= die_t
- *, and program hasnt been marked as finished, mark it as finished and print that the current philo died
+ * for each philo, if time has passed since their 
+ * last meal time and that time is >= die_t,
+ * and program hasnt been marked as finished, 
+ * mark it as finished and print that the current philo died
 */
 bool	philo_died(t_data *data)
 {
@@ -45,8 +47,8 @@ bool	philo_died(t_data *data)
 }
 
 /*
- * If all of the philosophers have eaten at least meals_nb then mark 'finish' as true
- * to finish simulation
+ * If all of the philosophers have eaten at least 
+ * meals_nb then mark 'finish' as true to finish simulation
 */
 bool	all_finished(t_data *data)
 {

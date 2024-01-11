@@ -6,14 +6,15 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 16:08:21 by damendez          #+#    #+#             */
-/*   Updated: 2023/12/20 17:38:53 by damendez         ###   ########.fr       */
+/*   Updated: 2024/01/10 13:37:05 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
 /*
- * thread protected printf writing current timestamp in simulation, philo id and string we want to output 
+ * thread protected printf writing current timestamp in simulation, 
+ * philo id and string we want to output 
 */
 void	ft_print(t_philo *philo, char *str)
 {

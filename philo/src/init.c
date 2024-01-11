@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 18:04:39 by damendez          #+#    #+#             */
-/*   Updated: 2023/12/20 17:26:51 by damendez         ###   ########.fr       */
+/*   Updated: 2024/01/10 13:28:03 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ static int	init_data(t_data *data, char **argv)
 	data->meals = -1;
 	if (argv[5])
 		data->meals = ft_atol(argv[5]);
-	//data->start_t = get_time()
 	data->m_forks = malloc(sizeof(pthread_mutex_t) * data->philo_nb);
 	if (!data->m_forks)
 		return (0);

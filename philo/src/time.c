@@ -6,14 +6,15 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 15:06:46 by damendez          #+#    #+#             */
-/*   Updated: 2023/12/20 17:15:33 by damendez         ###   ########.fr       */
+/*   Updated: 2024/01/10 13:33:34 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
 /*
- * Uses gettimeofday to get number of secs and microsecs since 1/1/1970 (unix time)
+ * Uses gettimeofday to get number of secs and 
+ * microsecs since 1/1/1970 (unix time)
  * , converts secs and microsecs to millisecs
 */
 void	ft_usleep(unsigned long t)
@@ -33,4 +34,3 @@ unsigned long	get_time(void)
 		return (0);
 	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
-

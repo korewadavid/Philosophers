@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 16:28:22 by damendez          #+#    #+#             */
-/*   Updated: 2023/12/20 17:47:27 by damendez         ###   ########.fr       */
+/*   Updated: 2024/01/10 13:32:28 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,13 @@ void	wait_start(t_philo *philo)
 
 /*
  * 1) First philo starts routine, every next one (2, 4, 6, etc.) will wait
- * 1.1) If theres and odd number of philosophers, last one must wait 2 wait cycles:
+ * 1.1) If theres and odd number of philosophers, last one waits 2 wait cycles:
  * 2) Until the simulation must finish, philos will eat then sleep and think
  * 2.1) eat: grab forks -> print, update eating bool and last meal time -> print
  *      "eat" and update meals eaten then let go foks
  * 2.2) sleep: //
 */
-void    *philo_routine(void *arg)
+void	*philo_routine(void *arg)
 {
 	t_philo	*philo;
 

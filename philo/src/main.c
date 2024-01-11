@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 15:57:58 by damendez          #+#    #+#             */
-/*   Updated: 2023/12/20 17:31:55 by damendez         ###   ########.fr       */
+/*   Updated: 2024/01/10 13:25:55 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ static int	start_threads(t_data *data)
 		return (0);
 	data->start_t = get_time();
 	while (++i < data->philo_nb)
-		if (pthread_create(&philo_th[i], NULL, &philo_routine, &data->philo[i]) != 0)
+		if (pthread_create(&philo_th[i], NULL,
+				&philo_routine, &data->philo[i]) != 0)
 			return (0);
 	if (pthread_create(&monitor, NULL, &monitor_routine, data) != 0)
 		return (0);

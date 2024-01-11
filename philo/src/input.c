@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 15:36:32 by damendez          #+#    #+#             */
-/*   Updated: 2023/12/20 17:46:30 by damendez         ###   ########.fr       */
+/*   Updated: 2024/01/10 13:29:23 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ static int	check_nb_args(int argc)
 }
 
 /*
- * 1) For each input argument string after first one, check if the characters are digits
+ * 1) For each input argument string after first one, 
+ * check if the characters are digits
  * 1.1) If user gave 'meals_nb' check that its greater than 0
 */
 static int	check_all_dig(int argc, char **argv)
@@ -37,7 +38,8 @@ static int	check_all_dig(int argc, char **argv)
 	{
 		while (argv[i][j])
 		{
-			if (!ft_isdigit((int)argv[i][j]) || (argc == 6 && ft_atol(argv[5]) <= 0))
+			if (!ft_isdigit((int)argv[i][j]) ||
+					(argc == 6 && ft_atol(argv[5]) <= 0))
 			{
 				printf("All values after ./philo must be integers > 0\n");
 				return (0);

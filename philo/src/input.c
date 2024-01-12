@@ -64,7 +64,7 @@ static int	least_60(char **argv)
 	i = 2;
 	while (i < 5)
 	{
-		if (!ft_atol(argv[i]) < 60)
+		if (ft_atol(argv[i]) < 60)
 		{
 			printf("All times must be >= 60\n");
 			return (1);

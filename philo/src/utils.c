@@ -46,7 +46,7 @@ long int	ft_atol(char *str)
 	}
 	if (str[i] == '\0')
 		return (1);
-	while (ft_isdigit((int)str[i]) != 0)
+	while (ft_isdigit((int)str[i]) == 0)
 	{
 		res = res * 10 + str[i] - '0';
 		i++;

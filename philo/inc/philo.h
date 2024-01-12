@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 16:00:36 by damendez          #+#    #+#             */
-/*   Updated: 2024/01/11 17:48:32 by damendez         ###   ########.fr       */
+/*   Updated: 2024/01/12 15:48:13 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,8 @@ void			ft_print_died(t_philo *philo, char *str);
 void			*monitor_routine(void *arg);
 
 /*		safe_func.c	*/
-void    safe_thread_handle(pthread_t *thread, void *(*foo)(void *), void *data, t_opcode opcode);
-void	safe_mutex_handle(pthread_mutex_t *mutex, t_opcode opcode);
+void			safe_thread_handle(pthread_t *thread, void *(*foo)(void *),
+					void *data, t_opcode opcode);
+void			safe_mutex_handle(pthread_mutex_t *mutex, t_opcode opcode);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 15:57:58 by damendez          #+#    #+#             */
-/*   Updated: 2024/01/11 17:49:46 by damendez         ###   ########.fr       */
+/*   Updated: 2024/01/12 15:54:25 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ static int	start_threads(t_data *data)
 		return (1);
 	data->start_t = get_time();
 	while (++i < data->philo_nb)
-		safe_thread_handle(&philo_th[i], &philo_routine, &data->philo[i], CREATE);
+		safe_thread_handle(&philo_th[i], &philo_routine,
+			&data->philo[i], CREATE);
 	safe_thread_handle(&monitor, &monitor_routine, data, CREATE);
 	i = -1;
 	while (++i < data->philo_nb)

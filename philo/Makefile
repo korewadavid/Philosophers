@@ -1,31 +1,24 @@
-NAME	=	philo
-HEADER	=	inc/philo.h
-SRC		=	src
-OBJ		=	obj
-SRCS	=	$(wildcard $(SRC)/*.c)
-OBJS	=	$(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SRCS))
-DEPS	=	$(addsuffix .d, $(basename $(SRCS)))
-CC		=	gcc
-CFLAGS	=	-Wall -Wextra -Werror -MMD
-RM		=	rm -rf
+NAME			:=	philo
 
-all: $(NAME)
+MANDATORY_DIR	:=	philo/
 
-$(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+FLAGS			=	-Werror -Wextra -Wall
 
-$(OBJ)/%.o: $(SRC)/%.c $(OBJ)
-	$(CC) $(CFLAGS) -g -c $< -o $@
+CC				=	gcc
 
-$(OBJ):
-	mkdir $@
+all:
+			@$(MAKE) -C $(MANDATORY_DIR)
+
+$(NAME):
+			@$(MAKE) -C $(MANDATORY_DIR)
 
 clean:
-	$(RM) $(OBJ) $(DEPS)
+			@make clean -sC $(MANDATORY_DIR)
 
-fclean: clean
-	$(RM) $(NAME)
+fclean:
+			@make fclean -sC $(MANDATORY_DIR)
 
-re: fclean all
+re:			fclean
+			@$(MAKE)
 
-.PHONY : clean fclean re all
+.PHONY:		all clean fclean re norm

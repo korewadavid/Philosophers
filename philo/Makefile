@@ -1,24 +1,37 @@
-NAME			:=	philo
+NAME		= philo
+SRCS		= init.c input.c main.c monitor.c routine.c safe_func.c time.c utils.c write.c
+CC			= gcc
+RM			= rm -rf
+CFLAGS		= -Wall -Werror -Wextra -fsanitize=address -MMD -pthread -g
+INCLUDES	= inc/philo.h
 
-MANDATORY_DIR	:=	philo/
+OBJ_DIR		= obj
+OBJS		= $(addprefix $(OBJ_DIR)/, $(SRCS:.c=.o))
+DEPS		= $(SRCS:.c=.d)
 
-FLAGS			=	-Werror -Wextra -Wall
+vpath %.c src
 
-CC				=	gcc
+$(OBJ_DIR)/%.o: %.c $(INCLUDES) Makefile
+					$(CC) $(CFLAGS) -c $< -o $@
 
-all:
-			@$(MAKE) -C $(MANDATORY_DIR)
+-include $(DEPS)
 
-$(NAME):
-			@$(MAKE) -C $(MANDATORY_DIR)
+# rules for cleaning (a phony rule) doesnt have depencies (all: if i dont tell 'make' anything, it will execute the specified rules)
+all: make_dir $(NAME)
+
+make_dir:
+					@mkdir -p $(OBJ_DIR)
+
+# rule for creating main program
+$(NAME): $(OBJS) $(INCLUDES)
+					$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
 clean:
-			@make clean -sC $(MANDATORY_DIR)
+		$(RM) $(OBJ_DIR)
 
-fclean:
-			@make fclean -sC $(MANDATORY_DIR)
+fclean: clean
+		$(RM) $(NAME)
 
-re:			fclean
-			@$(MAKE)
+re: fclean all
 
-.PHONY:		all clean fclean re norm
+.PHONY: all clean fclean re make_dir

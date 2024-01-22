@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 16:28:22 by damendez          #+#    #+#             */
-/*   Updated: 2024/01/11 17:46:02 by damendez         ###   ########.fr       */
+/*   Updated: 2024/01/22 16:52:43 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,13 @@
 
 static void	ft_sleep_think(t_philo *philo)
 {
+	safe_mutex_handle(&philo->data->m_finish, LOCK);
 	if (philo->data->finish == true)
+	{
+		safe_mutex_handle(&philo->data->m_finish, UNLOCK);
 		return ;
+	}
+	safe_mutex_handle(&philo->data->m_finish, UNLOCK);
 	ft_print(philo, "is sleeping");
 	ft_usleep(philo->data->sleep_t);
 	ft_print(philo, "is thinking");
@@ -23,18 +28,25 @@ static void	ft_sleep_think(t_philo *philo)
 
 static void	ft_eat(t_philo *philo)
 {
+	safe_mutex_handle(&philo->data->m_finish, LOCK);
 	if (philo->data->finish == true)
+	{
+		safe_mutex_handle(&philo->data->m_finish, UNLOCK);
 		return ;
+	}
+	safe_mutex_handle(&philo->data->m_finish, UNLOCK);
 	safe_mutex_handle(&philo->data->m_forks[philo->l_fork], LOCK);
-	safe_mutex_handle(&philo->data->m_forks[philo->r_fork], LOCK);
 	ft_print(philo, "has taken a fork");
+	safe_mutex_handle(&philo->data->m_forks[philo->r_fork], LOCK);
 	ft_print(philo, "has taken a fork");
 	safe_mutex_handle(&philo->m_eating, LOCK);
 	philo->eating = 1;
 	philo->last_meal_t = get_time();
 	ft_print(philo, "is eating");
 	ft_usleep(philo->data->eat_t);
-	philo->meals_done++;
+	safe_mutex_handle(&philo->m_meals, LOCK);
+	philo->meals_done++; // DATA RACES
+	safe_mutex_handle(&philo->m_meals, UNLOCK);
 	philo->eating = 0;
 	safe_mutex_handle(&philo->m_eating, UNLOCK);
 	safe_mutex_handle(&philo->data->m_forks[philo->l_fork], UNLOCK);
@@ -75,8 +87,13 @@ void	*philo_routine(void *arg)
 	wait_start(philo);
 	while (1)
 	{
+		safe_mutex_handle(&philo->data->m_finish, LOCK);
 		if (philo->data->finish == true)
+		{
+			safe_mutex_handle(&philo->data->m_finish, UNLOCK);
 			return (NULL);
+		}
+		safe_mutex_handle(&philo->data->m_finish, UNLOCK);
 		ft_eat(philo);
 		ft_sleep_think(philo);
 	}

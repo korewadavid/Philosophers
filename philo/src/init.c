@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 18:04:39 by damendez          #+#    #+#             */
-/*   Updated: 2024/01/11 17:40:59 by damendez         ###   ########.fr       */
+/*   Updated: 2024/01/22 16:51:12 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ static int	init_mutex(t_data *data)
 	{
 		safe_mutex_handle(&data->m_forks[i], INIT);
 		safe_mutex_handle(&data->philo[i].m_eating, INIT);
+		safe_mutex_handle(&data->philo[i].m_meals, INIT);
 	}
 	safe_mutex_handle(&data->m_print, INIT);
 	safe_mutex_handle(&data->m_finish, INIT);

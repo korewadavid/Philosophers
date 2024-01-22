@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 16:00:36 by damendez          #+#    #+#             */
-/*   Updated: 2024/01/12 15:48:13 by damendez         ###   ########.fr       */
+/*   Updated: 2024/01/22 16:51:12 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct s_philo
 	int					eating;
 	unsigned long		last_meal_t;
 	pthread_mutex_t		m_eating;
+	pthread_mutex_t		m_meals;
 	t_data				*data;
 }			t_philo;
 

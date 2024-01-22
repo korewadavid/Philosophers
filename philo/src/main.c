@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 15:57:58 by damendez          #+#    #+#             */
-/*   Updated: 2024/01/12 15:54:25 by damendez         ###   ########.fr       */
+/*   Updated: 2024/01/22 14:28:10 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	main(int argc, char **argv)
 		return (1);
 	if (init_all(&data, argv))
 		return (1);
-	if (!start_threads(&data))
+	if (start_threads(&data))
 		return (1);
 	free_all(&data);
 	return (0);

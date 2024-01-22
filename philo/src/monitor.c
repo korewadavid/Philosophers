@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 16:08:23 by damendez          #+#    #+#             */
-/*   Updated: 2024/01/11 17:43:51 by damendez         ###   ########.fr       */
+/*   Updated: 2024/01/22 16:53:39 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,9 @@ bool	philo_died(t_data *data)
 	while (++i < data->philo_nb)
 	{
 		t2 = get_time();
+		safe_mutex_handle(&data->philo[i].m_eating, LOCK);
 		t1 = data->philo[i].last_meal_t;
+		safe_mutex_handle(&data->philo[i].m_eating, UNLOCK);
 		elapsed = t2 - t1;
 		if (t2 > t1 && (elapsed >= data->die_t) && (data->finish == false))
 		{
@@ -57,8 +59,13 @@ bool	all_finished(t_data *data)
 	i = 0;
 	if (data->meals > 0)
 	{
-		while (i < data->philo_nb && data->philo[i].meals_done >= data->meals)
-			i++;
+		while (i < data->philo_nb)
+		{
+			safe_mutex_handle(&data->philo[i].m_eating, LOCK);
+			if (i < data->philo_nb && data->philo[i].meals_done >= data->meals)
+				i++;
+			safe_mutex_handle(&data->philo[i].m_eating, UNLOCK);
+		}
 		if (i == data->philo_nb)
 		{
 			safe_mutex_handle(&data->m_finish, LOCK);

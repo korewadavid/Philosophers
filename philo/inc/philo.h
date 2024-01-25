@@ -54,7 +54,8 @@ typedef struct s_data
 	unsigned long	eat_t;
 	unsigned long	sleep_t;
 	unsigned long	start_t;
-	bool			finish;
+	//bool			finish;
+	int				is_print; // used in final_check before 
 	pthread_mutex_t	*m_forks;
 	pthread_mutex_t	m_print;
 	pthread_mutex_t	m_finish;

@@ -18,16 +18,14 @@
 */
 void	ft_print(t_philo *philo, char *str)
 {
-	safe_mutex_handle(&philo->data->m_finish, LOCK);
-	if (philo->data->finish == true)
-	{
-		safe_mutex_handle(&philo->data->m_finish, UNLOCK);
-		return ;
-	}
-	safe_mutex_handle(&philo->data->m_finish, UNLOCK);
-	safe_mutex_handle(&philo->data->m_print, LOCK);
-	printf("%lu\t%d\t%s\n", get_time() - philo->data->start_t, philo->id, str);
-	safe_mutex_handle(&philo->data->m_print, UNLOCK);
+	long	time;
+
+	time = time_now(philo);
+	if (check_dead(philo))
+		return (1);
+	pthread_mutex_lock(&philo->data->m_print);
+	printf("%lu\t%d\t%s\n", time, philo->philo_id, str);
+	pthread_mutex_unlock(&philo->data->m_print);
 }
 
 void	ft_print_died(t_philo *philo, char *str)

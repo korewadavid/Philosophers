@@ -57,17 +57,17 @@ static int	init_data(t_data *data, char **argv)
 
 	i = -1;
 	data->philo_nb = ft_atol(argv[1]);
-	data->die_t = ft_atol(argv[2]);
-	data->eat_t = ft_atol(argv[3]);
-	data->sleep_t = ft_atol(argv[4]);
-	data->meals = -1;
+	data->die_time = ft_atol(argv[2]);
+	data->eat_time = ft_atol(argv[3]);
+	data->sleep_time = ft_atol(argv[4]);
+	data->must_eat_nb = -1;
 	if (argv[5])
-		data->meals = ft_atol(argv[5]);
+		data->must_eat_nb = ft_atol(argv[5]);
 	data->m_forks = malloc(sizeof(pthread_mutex_t) * data->philo_nb);
 	if (!data->m_forks)
 		return (1);
 	while (++i < data->philo_nb)
-		safe_mutex_handle(&data->m_forks[i], INIT);
+		if safe_mutex_handle(&data->m_forks[i], INIT);
 	safe_mutex_handle(&data->m_print, INIT);
 	data->finish = false;
 	safe_mutex_handle(&data->m_finish, INIT);

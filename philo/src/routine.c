@@ -12,6 +12,21 @@
 
 #include "../inc/philo.h"
 
+static void	one_philo_case(t_philo *philo)
+{
+	long	time;
+
+	time = time_now(philo);
+	// lock fork, print msg, sleep, then die
+	pthread_mutex_lock(&philo->r_fork);
+	ft_print(philo, "has taken right fork");
+	while (time_now(philo) < (time + philo->data->time_to_die))
+		usleep(10);
+	philo->data->dead_time = time_now(philo);
+	pthread_mutex_unlock(&philo->r_fork);
+	philo->data->dead = 1;
+}
+
 static void	ft_sleep_think(t_philo *philo)
 {
 	safe_mutex_handle(&philo->data->m_finish, LOCK);
@@ -53,49 +68,34 @@ static void	ft_eat(t_philo *philo)
 	safe_mutex_handle(&philo->data->m_forks[philo->r_fork], UNLOCK);
 }
 
-void	wait_start(t_philo *philo)
-{
-	if (philo->id % 2 == 0)
-		ft_usleep(philo->data->eat_t / 2);
-	else if (philo->data->philo_nb % 2 != 0
-		&& philo->id == philo->data->philo_nb)
-		ft_usleep(philo->data->eat_t + 10);
-}
-
-/*
- * 1) First philo starts routine, every next one (2, 4, 6, etc.) will wait
- * 1.1) If theres and odd number of philosophers, last one waits 2 wait cycles:
- * 2) Until the simulation must finish, philos will eat then sleep and think
- * 2.1) eat: grab forks -> print, update eating bool and last meal time -> print
- *      "eat" and update meals eaten then let go foks
- * 2.2) sleep: //
-*/
 void	*philo_routine(void *arg)
 {
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	if (philo->data->philo_nb == 1)
-	{
-		safe_mutex_handle(&philo->data->m_forks[philo->l_fork], LOCK);
-		ft_print(philo, "has taken a fork");
-		safe_mutex_handle(&philo->data->m_forks[philo->l_fork], UNLOCK);
-		ft_usleep(philo->data->die_t);
-		ft_print_died(philo->data->philo, "died");
-		return (NULL);
-	}
-	wait_start(philo);
+
+	//TO-DOspinlock 
+
 	while (1)
 	{
-		safe_mutex_handle(&philo->data->m_finish, LOCK);
-		if (philo->data->finish == true)
+		if (philo->data->philo_nb == 1)
 		{
-			safe_mutex_handle(&philo->data->m_finish, UNLOCK);
-			return (NULL);
+			one_philo_case(philo);
+			break;
 		}
-		safe_mutex_handle(&philo->data->m_finish, UNLOCK);
-		ft_eat(philo);
-		ft_sleep_think(philo);
+		if (philo_eat(philo) == -1) // TO-DO
+			break;
+		if (philo_sleep(philo) == -1) // TO-DO
+			break;
+		if (philo_think(philo) == -1) // TO-DO
+			break;
 	}
+
+	/*
+	final_check:
+		is_print: set when philo is ready to be classified in dead, used in check_dead
+		philo_die: prints philo dead_time
+	*/ 
+
 	return (NULL);
 }

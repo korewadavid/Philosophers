@@ -12,14 +12,14 @@
 
 #include "../inc/philo.h"
 
-static void	handle_error(int status)
+static int	handle_error(int status)
 {
 	if (status != 0)
-		exit(EXIT_FAILURE);
-	return ;
+		return (1);
+	return (0);
 }
 
-void	safe_mutex_handle(pthread_mutex_t *mutex, t_opcode opcode)
+int	safe_mutex_handle(pthread_mutex_t *mutex, t_opcode opcode)
 {
 	if (LOCK == opcode)
 		handle_error(pthread_mutex_lock(mutex));
@@ -30,10 +30,10 @@ void	safe_mutex_handle(pthread_mutex_t *mutex, t_opcode opcode)
 	else if (DESTROY == opcode)
 		handle_error(pthread_mutex_destroy(mutex));
 	else
-		exit(EXIT_FAILURE);
+		;
 }
 
-void	safe_thread_handle(pthread_t *thread, void *(*foo)(void *),
+int	safe_thread_handle(pthread_t *thread, void *(*foo)(void *),
 			void *data, t_opcode opcode)
 {
 	if (CREATE == opcode)

@@ -47,10 +47,9 @@ typedef struct s_philo
 typedef struct s_data
 {
 	int				philo_nb;
-	unsigned long	die_time;
+	unsigned long	time_to_die;
 	unsigned long	eat_time;
 	unsigned long	sleep_time;
-	unsigned long	start_time;
 	int				must_eat_nb;
 	int				philo_full;
 	int				dead;
@@ -69,6 +68,7 @@ typedef struct s_data
 /*	 	time.c		*/
 unsigned long	get_time(void);
 void			ft_usleep(unsigned long time);
+unsigned long	time_now(t_philo *philo);
 
 /*		input.c	*/
 int				check_input(int argc, char **argv);

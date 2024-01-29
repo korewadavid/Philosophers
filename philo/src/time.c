@@ -26,6 +26,16 @@ void	ft_usleep(unsigned long t)
 		usleep(200);
 }
 
+unsigned long	time_now(t_philo *philo)
+{
+	long	time;
+
+	pthread_mutex_long(&philo->data->m_time);
+	time = get_time() - philo->data->start_time;
+	pthread_mutex_unlock(&philo->data->m_time);
+	return (time);
+}
+
 unsigned long	get_time(void)
 {
 	struct timeval	tv;

@@ -35,30 +35,34 @@ typedef struct s_data	t_data;
 
 typedef struct s_philo
 {
-	int					id;
+	int					philo_id;
+	pthread_t			thread_id;
 	int					r_fork;
 	int					l_fork;
-	int					meals_done;	
-	int					eating;
-	unsigned long		last_meal_t;
-	pthread_mutex_t		m_eating;
-	pthread_mutex_t		m_meals;
+	unsigned long long	last_meal_time;
+	int					ph_meal; // nb of times specific philo has aten
 	t_data				*data;
 }			t_philo;
 
 typedef struct s_data
 {
 	int				philo_nb;
-	int				meals;
-	unsigned long	die_t;
-	unsigned long	eat_t;
-	unsigned long	sleep_t;
-	unsigned long	start_t;
-	//bool			finish;
+	unsigned long	die_time;
+	unsigned long	eat_time;
+	unsigned long	sleep_time;
+	unsigned long	start_time;
+	int				must_eat_nb;
+	int				philo_full;
+	int				dead;
 	int				is_print; // used in final_check before 
+	int				total_meals;
+	unsigned long	start_time;
+	unsigned long	dead_time;
 	pthread_mutex_t	*m_forks;
 	pthread_mutex_t	m_print;
-	pthread_mutex_t	m_finish;
+	pthread_mutex_t	m_check_dead;
+	pthread_mutex_t	m_time;
+	pthread_mutex_t	m_last_meal_time;
 	t_philo			*philo;
 }			t_data;
 

@@ -16,7 +16,7 @@
  * thread protected printf writing current timestamp in simulation, 
  * philo id and string we want to output 
 */
-void	ft_print(t_philo *philo, char *str)
+int	ft_print(t_philo *philo, char *str)
 {
 	long	time;
 
@@ -26,11 +26,14 @@ void	ft_print(t_philo *philo, char *str)
 	pthread_mutex_lock(&philo->data->m_print);
 	printf("%lu\t%d\t%s\n", time, philo->philo_id, str);
 	pthread_mutex_unlock(&philo->data->m_print);
+	return (0);
 }
 
-void	ft_print_died(t_philo *philo, char *str)
+int		error_msg(char *msg, int ret)
 {
-	safe_mutex_handle(&philo->data->m_print, LOCK);
-	printf("%lu\t%d\t%s\n", get_time() - philo->data->start_t, philo->id, str);
-	safe_mutex_handle(&philo->data->m_print, UNLOCK);
+	//int	i;
+
+	//i = ft_strlen(msg); // TO-0O
+	printf("%s\n", msg);
+	return (ret);
 }

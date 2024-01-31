@@ -12,25 +12,41 @@
 
 #include "../inc/philo.h"
 
-/*
- * Uses gettimeofday to get number of secs and 
- * microsecs since 1/1/1970 (unix time)
- * , converts secs and microsecs to millisecs
-*/
-void	ft_usleep(unsigned long t)
+int	specific_usleep(t_philo *philo)
 {
-	unsigned long	start;
+	unsigned long	time;
+	unsigned long	end;
 
-	start = get_time();
-	while ((get_time() - start) < t)
-		usleep(200);
+	time = 0;
+	// start waiting times
+	if (!philo->ph_meal && philo->philo_id % 2 != 0
+		&& philo->data->philo_nb != philo->philo_id)
+		return (0);
+	else if (!philo->ph_meal && philo->philo_id % 2 == 0)
+		time = philo->data->eat_time;
+	else if (!philo->ph_meal && philo->data->philo_nb != 0
+		&& philo->data->philo_nb == philo->philo_id)
+		time = philo->data->eat_time * 2;
+	// custom sleep time
+	else if (philo->ph_meal && philo->data->philo_nb % 2 != 0)
+		time = (philo->data->eat_time * 2) - philo->data->sleep_time;
+	else if (philo->ph_meal && philo->data->philo_nb % 2 == 0)
+		time = philo->data->eat_time - philo->data->sleep_time;
+	end = time_now(philo) + time;
+	while (time_now(philo) < end)
+	{
+		if (check_dead(philo))
+			return (1);
+		usleep(50);
+	}
+	return (0);
 }
 
 unsigned long	time_now(t_philo *philo)
 {
 	long	time;
 
-	pthread_mutex_long(&philo->data->m_time);
+	pthread_mutex_lock(&philo->data->m_time);
 	time = get_time() - philo->data->start_time;
 	pthread_mutex_unlock(&philo->data->m_time);
 	return (time);

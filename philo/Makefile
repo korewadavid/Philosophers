@@ -1,5 +1,5 @@
 NAME		= philo
-SRCS		= init.c input.c main.c monitor.c routine.c safe_func.c time.c utils.c write.c
+SRCS		= eat.c init.c input.c main.c routine.c time.c utils.c write.c
 CC			= gcc
 RM			= rm -rf
 CFLAGS		= -Wall -Werror -Wextra -MMD -g #-fsanitize=address -pthread

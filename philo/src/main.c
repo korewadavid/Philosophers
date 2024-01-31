@@ -14,53 +14,44 @@
 
 static int	start_threads(t_data *data)
 {
-	pthread_t	monitor;
 	int			i;
-	pthread_t	*philo_th;
 
 	i = -1;
-	philo_th = (pthread_t *)malloc(sizeof(pthread_t) * data->philo_nb);
-	if (!philo_th)
-		return (1);
-	data->start_t = get_time();
 	while (++i < data->philo_nb)
-		safe_thread_handle(&philo_th[i], &philo_routine,
-			&data->philo[i], CREATE);
-	safe_thread_handle(&monitor, &monitor_routine, data, CREATE);
+		if (pthread_create(&data->philos[i].thread_id, NULL, philo_routine, &data->philos[i]))
+			return (error_msg("pthread_create() error", 1));
 	i = -1;
 	while (++i < data->philo_nb)
-		safe_thread_handle(&philo_th[i], NULL, NULL, JOIN);
-	safe_thread_handle(&monitor, NULL, NULL, JOIN);
-	free(philo_th);
+		if (pthread_join(data->philos[i].thread_id, NULL))
+			return (error_msg("pthread_join() error", 1));
 	return (0);
 }
 
-static void	free_all(t_data *data)
+static int	free_all(t_data *data, int ret)
 {
 	int	i;
 
+	free(data->philos);
 	i = -1;
 	while (++i < data->philo_nb)
-		safe_mutex_handle(&data->philo[i].m_eating, DESTROY);
-	free(data->philo);
-	i = -1;
-	while (++i < data->philo_nb)
-		safe_mutex_handle(&data->m_forks[i], DESTROY);
+		pthread_mutex_destroy(&data->m_forks[i]);
 	free(data->m_forks);
-	safe_mutex_handle(&data->m_print, DESTROY);
-	safe_mutex_handle(&data->m_finish, DESTROY);
+	pthread_mutex_destroy(&data->m_print);
+	pthread_mutex_destroy(&data->m_check_dead);
+	pthread_mutex_destroy(&data->m_time);
+	pthread_mutex_destroy(&data->m_last_meal_time);
+	return (ret);
 }
 
 int	main(int argc, char **argv)
 {
 	t_data	data;
 
-	if (check_input(argc, argv))
+	if (check_input(argc, argv)) // TO-DO ?
 		return (1);
-	if (init_all(&data, argv))
+	if (init_data(&data, argc, argv))
 		return (1);
 	if (start_threads(&data))
-		return (1);
-	free_all(&data);
-	return (0);
+		return (free_all(&data, 1));
+	return (free_all(&data, 0));
 }

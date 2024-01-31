@@ -2,7 +2,7 @@ NAME		= philo
 SRCS		= eat.c init.c input.c main.c routine.c time.c utils.c write.c
 CC			= gcc
 RM			= rm -rf
-CFLAGS		= -Wall -Werror -Wextra -MMD -g #-fsanitize=address -pthread
+CFLAGS		= -Wall -Werror -Wextra -MMD -g -fsanitize=thread
 INCLUDES	= inc/philo.h
 
 OBJ_DIR		= obj
@@ -16,7 +16,6 @@ $(OBJ_DIR)/%.o: %.c $(INCLUDES) Makefile
 
 -include $(DEPS)
 
-# rules for cleaning (a phony rule) doesnt have depencies (all: if i dont tell 'make' anything, it will execute the specified rules)
 all: make_dir $(NAME)
 
 make_dir:

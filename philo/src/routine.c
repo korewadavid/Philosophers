@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 16:28:22 by damendez          #+#    #+#             */
-/*   Updated: 2024/01/22 16:52:43 by damendez         ###   ########.fr       */
+/*   Updated: 2024/01/31 18:31:59 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ static void	one_philo_case(t_philo *philo)
 	long	time;
 
 	time = time_now(philo);
-	// lock fork, print msg, sleep, then die
 	pthread_mutex_lock(&philo->data->m_forks[philo->r_fork]);
 	ft_print(philo, "has taken right fork");
 	while (time_now(philo) < (time + philo->data->time_to_die))
@@ -83,15 +82,10 @@ void	*philo_routine(void *arg)
 			break ;
 		}
 		if (philo_eat(philo) == -1)
-			break;
-		if (philo_sleep_think(philo) == -1) //prints and checks if a philo dies while sleeping
-			break;
+			break ;
+		if (philo_sleep_think(philo) == -1)
+			break ;
 	}
-	/*
-	final_check:
-		is_print: set when philo is ready to be classified in dead, used in check_dead
-		philo_die: prints philo dead_time
-	*/
 	final_check(philo);
 	return (NULL);
 }

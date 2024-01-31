@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 15:57:58 by damendez          #+#    #+#             */
-/*   Updated: 2024/01/22 14:28:10 by damendez         ###   ########.fr       */
+/*   Updated: 2024/01/31 21:08:29 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ static int	start_threads(t_data *data)
 
 	i = -1;
 	while (++i < data->philo_nb)
-		if (pthread_create(&data->philos[i].thread_id, NULL, philo_routine, &data->philos[i]))
+		if (pthread_create(&data->philos[i].thread_id, NULL, \
+			philo_routine, &data->philos[i]))
 			return (error_msg("pthread_create() error", 1));
 	i = -1;
 	while (++i < data->philo_nb)
@@ -47,7 +48,7 @@ int	main(int argc, char **argv)
 {
 	t_data	data;
 
-	if (check_input(argc, argv)) // TO-DO ?
+	if (check_input(argc, argv)) // TO-DO
 		return (1);
 	if (init_data(&data, argc, argv))
 		return (1);

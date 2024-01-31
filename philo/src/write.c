@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 16:08:21 by damendez          #+#    #+#             */
-/*   Updated: 2024/01/22 14:50:54 by damendez         ###   ########.fr       */
+/*   Updated: 2024/01/31 18:43:16 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,8 @@ int	ft_print(t_philo *philo, char *str)
 	return (0);
 }
 
-int		error_msg(char *msg, int ret)
+int	error_msg(char *msg, int ret)
 {
-	//int	i;
-
-	//i = ft_strlen(msg); // TO-0O
 	printf("%s\n", msg);
 	return (ret);
 }

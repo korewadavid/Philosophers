@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 15:06:46 by damendez          #+#    #+#             */
-/*   Updated: 2024/01/11 16:01:14 by damendez         ###   ########.fr       */
+/*   Updated: 2024/01/31 18:34:28 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ int	specific_usleep(t_philo *philo)
 	unsigned long	end;
 
 	time = 0;
-	// start waiting times
 	if (!philo->ph_meal && philo->philo_id % 2 != 0
 		&& philo->data->philo_nb != philo->philo_id)
 		return (0);
@@ -27,7 +26,6 @@ int	specific_usleep(t_philo *philo)
 	else if (!philo->ph_meal && philo->data->philo_nb != 0
 		&& philo->data->philo_nb == philo->philo_id)
 		time = philo->data->eat_time * 2;
-	// custom sleep time
 	else if (philo->ph_meal && philo->data->philo_nb % 2 != 0)
 		time = (philo->data->eat_time * 2) - philo->data->sleep_time;
 	else if (philo->ph_meal && philo->data->philo_nb % 2 == 0)

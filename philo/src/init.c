@@ -6,17 +6,34 @@
 /*   By: damendez <damendez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 18:04:39 by damendez          #+#    #+#             */
-/*   Updated: 2024/01/22 16:51:12 by damendez         ###   ########.fr       */
+/*   Updated: 2024/01/31 18:25:20 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-static int	init_mutex(t_data *data)
+static int	init_forks(t_data *data)
 {
 	int	i;
 
 	i = -1;
+	while (++i < data->philo_nb)
+	{
+		if (pthread_mutex_init(&data->m_forks[i], NULL))
+		{
+			while (--i > 0)
+				pthread_mutex_destroy(&data->m_forks[i]);
+			pthread_mutex_destroy(&data->m_print);
+			pthread_mutex_destroy(&data->m_check_dead);
+			pthread_mutex_destroy(&data->m_time);
+			return (1);
+		}
+	}
+	return (0);
+}
+
+static int	init_mutex(t_data *data)
+{
 	if (pthread_mutex_init(&data->m_print, NULL))
 		return (1);
 	if (pthread_mutex_init(&data->m_check_dead, NULL))
@@ -37,19 +54,7 @@ static int	init_mutex(t_data *data)
 		pthread_mutex_destroy(&data->m_time);
 		return (1);
 	}
-	while (++i < data->philo_nb)
-	{
-		if (pthread_mutex_init(&data->m_forks[i], NULL))
-		{
-			while (--i > 0)
-				pthread_mutex_destroy(&data->m_forks[i]);
-			pthread_mutex_destroy(&data->m_print);
-			pthread_mutex_destroy(&data->m_check_dead);
-			pthread_mutex_destroy(&data->m_time);
-			return (1);
-		}
-	}
-	return (0);
+	return (init_forks(data));
 }
 
 static void	init_philos(t_data *data)
@@ -64,7 +69,6 @@ static void	init_philos(t_data *data)
 		data->philos[i].r_fork = i - 1;
 		if (i == 0)
 			data->philos[i].r_fork = data->philo_nb - 1;
-		//data->philos[i].last_meal_time = get_time();
 		data->philos[i].ph_meal = 0;
 		data->philos[i].data = data;
 	}
@@ -85,7 +89,8 @@ int	init_data(t_data *data, int argc, char **argv)
 	data->philos = (t_philo *)malloc(sizeof(t_philo) * data->philo_nb);
 	if (!data->philos)
 		return (1);
-	data->m_forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * data->philo_nb);
+	data->m_forks = (pthread_mutex_t *)malloc
+		(sizeof(pthread_mutex_t) * data->philo_nb);
 	if (!data->m_forks)
 		return (ft_free(data->philos, NULL));
 	if (init_mutex(data) == 1)

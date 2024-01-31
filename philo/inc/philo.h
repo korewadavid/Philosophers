@@ -6,7 +6,7 @@
 /*   By: damendez <damendez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 16:00:36 by damendez          #+#    #+#             */
-/*   Updated: 2024/01/22 16:51:12 by damendez         ###   ########.fr       */
+/*   Updated: 2024/01/31 21:08:29 by damendez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,7 @@
 # include <pthread.h>
 # include <unistd.h>
 # include <stdbool.h>
-
-// typedef enum e_opcode
-// {
-// 	LOCK,
-// 	UNLOCK,
-// 	INIT,
-// 	DESTROY,
-// 	CREATE,
-// 	JOIN,
-// 	DETACH,
-// }					t_opcode;
+# include <limits.h>
 
 typedef struct s_data	t_data;
 
@@ -40,7 +30,7 @@ typedef struct s_philo
 	int					r_fork;
 	int					l_fork;
 	unsigned long long	last_meal_time;
-	int					ph_meal; // nb of times specific philo has aten
+	int					ph_meal;
 	t_data				*data;
 }			t_philo;
 
@@ -72,7 +62,7 @@ unsigned long	time_now(t_philo *philo);
 int				specific_usleep(t_philo *philo);
 
 /*		input.c	*/
-int				check_input(int argc, char **argv);
+int				check_input(int argc, char **argv); // TO-DO
 
 /*		utils.c		*/
 long int		ft_atol(char *str);
@@ -92,12 +82,5 @@ int				philo_eat(t_philo *philo);
 /*		write.c		*/
 int				ft_print(t_philo *philo, char *str);
 int				error_msg(char *msg, int ret);
-
-/*		monitor.c	*/
-//void			*monitor_routine(void *arg); // TO_DO
-
-/*		safe_func.c	*/
-//void			safe_thread_handle(pthread_t *thread, void *(*foo)(void *), void *data, t_opcode opcode); // TO-DO
-//void			safe_mutex_handle(pthread_mutex_t *mutex, t_opcode opcode); // TO-DO
 
 #endif
